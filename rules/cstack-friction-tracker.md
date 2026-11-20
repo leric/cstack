@@ -1,0 +1,22 @@
+---
+name: cstack-friction-tracker
+description: Ambient side-band friction tracker that appends search, boundary, and ownership friction to .cstack/friction.log so episodic architectural signals survive context compaction.
+globs: "**/*"
+alwaysApply: true
+---
+
+# Ambient Side-Band Friction Tracker (`cstack`)
+
+Context compaction erases first-hand search and edit friction before post-task reflection (`/cs-reflect`) runs. To preserve episodic structural signals with near-zero token overhead, immediately append a **single-line entry (<50 words)** to `.cstack/friction.log` (create the `.cstack/` directory and file if needed) whenever you experience any of the following during a task:
+
+1. **Search Friction (`[MISSING_PATH]`)**:
+   - Trigger: $>3$ failed or unrelated file reads/greps to locate a domain concept, handler, or coupled co-change site.
+   - Format: `<ISO-timestamp> [MISSING_PATH] <searched concept> -> <detour taken> -> <actual location>`
+2. **Boundary Friction (`[BOUNDARY_BYPASS]`)**:
+   - Trigger: Backing out of an architectural interface, reaching across layers (e.g., Domain/UseCase importing Infrastructure/UI), or passing raw transport/DB shapes across a boundary to make a change work.
+   - Format: `<ISO-timestamp> [BOUNDARY_BYPASS] <source file/layer> -> <target file/layer>: <why boundary felt obstructive>`
+3. **Orphan Creation (`[UNOWNED_CAPABILITY]`)**:
+   - Trigger: Creating a helper, validator, mapper, formatter, or policy rule without an obvious single domain owner.
+   - Format: `<ISO-timestamp> [UNOWNED_CAPABILITY] <symbol@file>: <capability created without clear canonical owner>`
+
+Do not narrate friction logging to the user—append silently to `.cstack/friction.log` and continue working.
