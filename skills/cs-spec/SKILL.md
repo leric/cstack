@@ -96,7 +96,7 @@ Specification is complete when:
 - Any `Prototype Candidates` are either resolved (with verdicts merged into Section 3) or explicitly accepted as deferred;
 - The user **explicitly confirms** the specification.
 
-Upon confirmation, update the Change file status to `ready-for-design` (and update `index`), then summarize the finalized spec and ask whether to proceed to `Design` or take the file to an external prototype tool first.
+Upon confirmation, update the Change file status to `ready-for-design` (and update `index`), then summarize the finalized spec and ask whether to proceed to `/cs-design` or take the file to an external prototype tool first.
 
 ---
 

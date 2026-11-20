@@ -8,21 +8,21 @@ Instead of re-implementing generic coding, testing, review, prototyping, or CI/C
 
 - **Explore (`cs-explore`)** — Understand the real-world problem and domain, capture proposed solutions faithfully, and uncover hidden rules via Design Tree Frontier grilling.
 - **Spec (`cs-spec`)** — Creatively design the target product model, role responsibilities, external behaviors, Solution Coverage, and `Out of Scope` guardrails.
-- **Design (`cs-design`, Phase 2)** — Apply CMP (Context Minimization Principle) and Clean Architecture to turn product behavior into executable boundaries and tasks.
-- **Reflect (`cs-reflect`, Phase 3)** — Harvest context-acquisition friction to repair architectural routing and merge realized changes back into Living Knowledge.
+- **Design (`cs-design`)** — Context-cost driven software design planner applying CMP (Context Minimization Principle) and Clean Architecture in conversation before implementation.
+- **Reflect (`cs-reflect`)** — Post-change design reflection directly on the live task trace (Missing Path / Boundary Bypass / Unowned Capability) plus Delta-to-Living Knowledge merge proposals.
 
 See [`docs/PRD.md`](docs/PRD.md) for the full product requirements document.
 
 ---
 
-## 1. Current Status: MVP (`cs-explore` + `cs-spec`)
+## 1. Current Status — All 4 Core Skills Ready
 
 | Skill / Primitive | Role | Status |
 | :--- | :--- | :--- |
-| **`/cs-explore`** | Problem & Domain Discovery (Frontier Grilling + Proposed Solution Capture) | **MVP Ready** |
-| **`/cs-spec`** | Product Design & Behavior Specification (Solution Coverage + Out of Scope + External Prototype Handoff) | **MVP Ready** |
-| **`/cs-design`** | Context-Cost Driven Software Design (CMP + Clean Architecture) | Planned (Phase 2) |
-| **`/cs-reflect`** | Post-Task Design Reflection + Delta-to-Living Knowledge Merge | Planned (Phase 3) |
+| **`/cs-explore`** | Problem & Domain Discovery (Frontier Grilling + Proposed Solution Capture) | **Ready** |
+| **`/cs-spec`** | Product Design & Behavior Specification (Solution Coverage + Out of Scope + External Prototype Handoff) | **Ready** |
+| **`/cs-design`** | Context-Cost Driven Software Design Planner (CMP + Clean Architecture, conversational plan) | **Ready** |
+| **`/cs-reflect`** | Post-Change Design Reflection + Delta-to-Living Knowledge Merge (Report-first, authorized repair/merge) | **Ready** |
 | **`cstack-explorer`** | Shared read-only context discovery subagent | Active Primitive |
 | **`cstack-friction-tracker`** | Shared ambient side-band friction tracker (`.cstack/friction.log`) | Active Primitive |
 
@@ -61,7 +61,18 @@ cstack/
 │   └── PRD.md                          # Product Requirements Document (v0.2)
 ├── skills/                             # Standard Agent Skills (edit directly)
 │   ├── cs-explore/SKILL.md
-│   └── cs-spec/SKILL.md
+│   ├── cs-spec/SKILL.md
+│   ├── cs-design/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       ├── design-plan-template.md
+│   │       └── architecture-map-template.md
+│   └── cs-reflect/
+│       ├── SKILL.md
+│       └── references/
+│           ├── checks.md
+│           ├── principles.md
+│           └── report-template.md
 ├── agents/
 │   └── cstack-explorer.md              # Shared read-only context slicer subagent
 └── rules/

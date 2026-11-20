@@ -270,9 +270,8 @@ Clean Architecture 通过分离 **Policy（What）** 与 **Mechanism（How）** 
 
 #### 输出
 
-- 直接体现在代码结构中的核心设计契约（Domain Models、Use Cases、Ports、可执行约束）。
-- 目标清晰的 Implementation Tasks。
-- 必要的 Architecture Map 更新（或登记于 Merge Notes）。
+- 对话中输出的决策导向 Design Plan（Quick / Full 模式），不落盘为冗余设计文档；确认未决 What-level Gate 后即可直接交由 Coding Agent 按由内向外的路线执行，最终由代码本身承载设计。
+- 必要的 Architecture Map 变更在实现完成后维护（或登记于 Change Merge Notes）。
 
 **完成标准：** 产品行为的软件责任边界、核心契约与依赖约束已明确表达，且引入的 Context Cost 与其为当前及未来修改带来的收益相符。
 
@@ -297,8 +296,8 @@ Reflect 基于 CMP 的 **Post-Task Design Reflection**，并辅以**旁路摩擦
 
 Reflect 是范围刻意收窄的反馈与闭环机制，不是通用 Code Review 或自动架构重设计：
 
-- **可自动处理（安全局部卫生）：** 更新知识索引、补齐语义注释/关闭修改索引、恢复明显越界的局部依赖、清理已消费的旁路摩擦日志。
-- **必须 Flag & Stop（人类架构师拍板）：** 改动公共命名、挪动模块目录/边界、新建抽象或 Port、重划能力归属、以及将 Change 合并回 Living Knowledge 时的冲突裁决。
+- **默认只读报告模式（Report Mode）：** 优先直接观察当前会话的 Live Task Context（必要时辅以 `.cstack/friction.log` 弥补压缩或跨会话缺口），基于证据给出诊断、修复建议与 Living Knowledge 合并提案，**默认不擅自改文件**。
+- **授权后执行（Repair / Merge Mode）：** 仅在用户明确授权后，才执行已批准的 how-level 局部修复、Living Knowledge / Architecture Map 合并与 Change 状态关闭（`merged`）；所有 what-level 决策（新抽象、边界重划、能力归属、与用户手工编辑 Living Knowledge 的冲突裁决）必须由人类架构师拍板。
 
 若本次轨迹未暴露有价值的设计问题，Reflect 不必强行提出改进。
 
