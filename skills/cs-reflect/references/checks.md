@@ -72,3 +72,21 @@ When `found`, report:
 - one output label: `ownership-needed`, `placement-unclear`, or `duplication-risk`.
 
 Do not silently choose an owner. Removing accidental duplication through an already-established owner is **how-level**; choosing a new owner or shared abstraction is **what-level**.
+
+## 4. Practice Discoveries & Expectation Gaps (Knowledge Sync Lens)
+
+This lens complements the three CMP checks. Even when code placement and boundaries are clean, contact with reality during execution can expose facts that the spec, plan, or human owner did not anticipate—and that vanish inside the final diff.
+
+**Question**: What did practice reveal that differed from expectations, and what must be synchronized back to the human owner?
+
+Fire only on **non-obvious, evidence-backed** episodes:
+- **Hidden constraint or nuance**: A real domain rule, dual-purpose model, undocumented precondition, or runtime/tool quirk discovered only when execution hit friction.
+- **Expectation deviation / workaround**: A place where the delivered behavior, verification scope, or implementation subtly departed from the original spec or plan.
+- **Misleading assumption**: Existing docs, comments, or prior beliefs that proved stale or incomplete in practice.
+
+Do **not** fire for routine debugging, ordinary implementation details, or facts already obvious from the Change spec. Prefer `None` over padding.
+
+For each finding, report:
+- `expected vs. actual` (grounded in concrete trace evidence);
+- `implication & scope` (what is confirmed vs. uncertain, and whether it is local or general);
+- `candidate destination`: `keep local` | `Living Knowledge` | `guidance (AGENTS.md / map / skill)` | `reopen in /cs-spec or /cs-explore`.

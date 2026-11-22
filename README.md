@@ -2,34 +2,52 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-*Discover the domain. Design the product. Evolve the software.*
+*Discover the domain. Design the product. Evolve the code.*
 
-`cstack` is a lightweight set of **4 AI software engineering skills** built around the **[Context Minimization Principle (CMP)](https://www.contextcost.dev/)** and **Domain Ontology**. Following the open Agent Skills (`SKILL.md`) standard, it works out of the box with **Cursor**, **Codex**, **Antigravity**, **Claude Code**, and **Pi**—with zero build step.
-
-Coding agents are already great at generating code and running tests. `cstack` does not reinvent coding, TDD, code review, or prototyping. Instead, it brings **CMP** into daily engineering so your codebase stays easy to understand, cheap to modify, and resistant to architectural decay as changes accumulate.
+`cstack` is a lightweight set of **4 AI software engineering skills** built on **Domain Ontology**, the **[Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/)**, and **Reflective Bootstrapping**. Following the open Agent Skills (`SKILL.md`) standard, it works out of the box with your coding agents.
 
 ---
 
-## Grounded in CMP (Context Minimization Principle)
+## The Hard Problem of AI Coding
 
-> *For the modifications a system must realistically support, prefer the design whose sufficient context is cheaper to acquire.*
+With modern coding agents, generating implementation code, tests, and refactors is becoming nearly free. Yet complex software projects haven't gotten any easier to evolve. When code becomes cheap, **coding is no longer the hard problem—three deeper problems take over**:
 
-Most AI-assisted codebases degrade not because models cannot write code, but because **context cost keeps growing**: domain concepts drift, decisions scatter without routes, boundaries become untrustworthy, and every new change requires reading more files just to stay safe.
+### 1. Modeling Reality (Building the Wrong Thing at 10x Speed)
+In real brownfield systems, requirements rarely arrive clean. Domain concepts drift, terms mean different things across modules, and older parts of the codebase still encode obsolete business constraints. When implementation is cheap, conceptual ambiguity becomes expensive: an eager coding agent will faithfully patch outdated abstractions, preserve dead assumptions, and ship polished code for the wrong mental model.
 
-`cstack` turns CMP into four iterative working modes:
+### 2. Compounding Complexity (Architectural Decay in Fast-Forward)
+Cheap code accelerates entropy. Every fast, locally reasonable AI change adds another special case, quietly bypasses a boundary, or leaves a legacy flow half-alive beside a new one. Over time, **structural complexity compounds**: making even a small change requires understanding dozens of scattered files just to stay safe, and routine edits begin breaking distant invariants.
 
-- **Low Context Cost in Knowledge**: One thin `.cstack/index.md` routes agents to your existing docs (any layout you prefer), while each in-flight change lives in a single self-contained file (`.cstack/changes/<change-id>.md`).
-- **Low Context Cost in Code**: `cs-design` applies CMP (Depth, Breadth / Modification Closure, `Reduce / Relocate / Index / Check`) with Clean Architecture as its primary context-routing practice—never as dogma.
-- **Continuous Anti-Decay**: `cs-reflect` observes the agent's live context-acquisition trace right after a change to catch `Missing Path`, `Boundary Bypass`, and `Unowned Capability` before debt compounds.
+### 3. The Broken Learning Loop (Delegation Cuts Off the Source of Knowledge)
+**Practice produces knowledge.** In complex software engineering, deep understanding rarely comes from upfront design alone—it emerges when plans collide with reality: a missing prerequisite, an unexpected constraint, a leaky boundary, or an undocumented convention discovered only while doing the work.
+
+When we delegate execution to coding agents, **the agent sits where plans meet reality, while the human only sees the finished diff.** Little of what was learned survives in the final commit: a working patch doesn't show the misleading doc that sent the agent down the wrong path, the hidden coupling it had to work around, or the legacy flow still overlapping the new one. Once the chat closes, that hard-won knowledge evaporates. Future agents repeat the same friction, Living Knowledge rots, and—most dangerously—**the human owner's mental model quietly detaches from the real system.**
+
+---
+
+## How `cstack` Tackles It: Ontology + CMP + Reflective Bootstrapping
+
+> **Better design, lower context cost.**
+>
+> *Context Minimization Principle (CMP): For the modifications a system must realistically support, prefer the design whose sufficient context is cheaper to acquire.*
+
+`cstack` does not reinvent coding, TDD, or code review. Instead, it brings three complementary disciplines into four lightweight working modes—where *context cost* isn't about token spend, but how much of the system a human or agent must understand and inspect to make a safe change:
+
+| The Remaining Hard Problem | How `cstack` Handles It | Skill |
+| :--- | :--- | :--- |
+| Ambiguous goals & obsolete assumptions | **Domain Ontology**: Audits your codebase first, captures proposals faithfully (`PS-*`), and runs short dependency-ordered frontier grilling with concrete examples to nail down real domain rules & terminology. | **`/cs-explore`** |
+| Scope creep & muddy product models | **Product Specification**: Defines target workflows, human/software/agent responsibilities, concrete acceptance scenarios, `PS-*` Solution Coverage, and explicit `Out of Scope` guardrails before coding. | **`/cs-spec`** |
+| Compounding structural complexity | **CMP Design**: Plans inside-out right in conversation (Modification Closure, Policy vs. Mechanism, Boundary Trust) and surfaces unresolved *What-level* human decisions—with zero redundant design docs. | **`/cs-design`** |
+| Broken learning loop & silent decay | **Reflective Bootstrapping**: Examines friction in the live execution trace right after implementation (`Missing Path`, `Boundary Bypass`, `Unowned Capability`) and runs human-reviewed **two-way knowledge synchronization**—bringing discoveries back to the human owner while merging realized Knowledge Deltas into Living Knowledge. | **`/cs-reflect`** |
 
 ---
 
 ## Design Philosophy
 
-1. **Model the domain, design the product, build for modification** — Understanding business reality (`Explore`), creatively designing a better workflow (`Spec`), and structuring evolvable code (`Design`) are distinct cognitive activities.
-2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary design artifacts. `cs-design` plans in conversation instead of writing redundant design docs.
-3. **Strict Delta + Merge** — In-flight changes stay isolated in `.cstack/changes/<change-id>.md` until implemented, then merge back into your Living Knowledge during reflection. You can still edit Living Knowledge directly at any time to fix inaccuracies about current state.
-4. **Human in the Architect's Chair** — AI handles searching, grilling, comparing options, and spotting friction; humans decide unresolved *What-level* product and architectural questions.
+1. **Model the domain, design the product, build for modification** — Understanding business reality (`Explore`), creatively designing a better workflow (`Spec`), and structuring evolvable code (`Design`) are distinct cognitive activities. Mixing them creates muddy abstractions.
+2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary design artifacts. `cs-design` plans in conversation rather than generating disposable design docs.
+3. **Practice feeds Living Knowledge (Strict Delta + Merge)** — In-flight changes live in a single self-contained file (`.cstack/changes/<change-id>.md`) until implemented, then discoveries from execution merge back into Living Knowledge during reflection. No forced doc hierarchy.
+4. **Human review as governance *and* knowledge synchronization** — AI handles codebase reconnaissance, structured grilling, option comparison, and friction detection. Humans own unresolved *What-level* decisions—and review is where lessons from delegated practice flow back into human understanding.
 
 ---
 
@@ -51,10 +69,10 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 
 | Skill | When to Invoke | What You Get |
 | :--- | :--- | :--- |
-| **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, or customer-proposed solution | Multi-round frontier grilling + concrete example testing → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
-| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, external behavior scenarios, `PS-*` Solution Coverage, `Out of Scope` guardrails, and optional `Prototype Candidate` flags → Sections 3–4 of the same Change file |
-| **`/cs-design`** | Before writing non-trivial code | Conversational Quick or Full CMP/CA plan: Modification Closure, Policy/Mechanism placement, unresolved What-level gates, and an inside-out implementation & test route |
-| **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | Concise read-only report on `Missing Path` / `Boundary Bypass` / `Unowned Capability` + a proposal to merge realized deltas back into Living Knowledge (writes only after you approve) |
+| **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, legacy overhaul, or user-proposed solution | Code-grounded reconnaissance + dependency-ordered frontier grilling + concrete examples → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
+| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, behavior scenarios, `PS-*` Solution Coverage, `Out of Scope` guardrails, and optional `Prototype Candidate` flags → Sections 3–4 of the same Change file |
+| **`/cs-design`** | Before writing non-trivial code | Conversational Quick or Full CMP / Clean Architecture plan: Modification Closure, Policy/Mechanism placement, unresolved *What-level* gates, and an inside-out implementation & test route |
+| **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | Read-only reflection on `Missing Path` / `Boundary Bypass` / `Unowned Capability` + a reviewable proposal to synchronize discoveries with you and merge realized deltas into Living Knowledge (writes only after you approve) |
 
 ---
 
@@ -65,29 +83,29 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
    /cs-explore Customers want the app to automatically recommend compliance standards
    when they pick an equipment type and generate assessment tasks.
    ```
-   - The agent checks `.cstack/index.md` and your codebase first (so it won't ask facts it can look up).
-   - It captures the user's original proposal (`PS-1`) without dismissing it, grills you in short dependency-ordered rounds with recommended answers, and updates `.cstack/changes/<change-id>.md` inline.
+   - Checks `.cstack/index.md` and your codebase first so it never asks facts it can look up.
+   - Captures the original proposal (`PS-1`) faithfully without dismissing it, grills you in short dependency-ordered rounds with recommended answers, and updates `.cstack/changes/<change-id>.md` inline.
 
 2. **Design the product behavior (`/cs-spec`)**
    ```text
    /cs-spec
    ```
-   - Builds on the same Change file to define target workflows, user/software/agent responsibilities, acceptance scenarios, `Solution Coverage` (accounting for every `PS-*`), and an explicit `Out of Scope` list.
-   - *Optional external prototyping*: If a UX or interaction choice feels hard to judge in text, the agent flags it as a `Prototype Candidate`. Take the self-contained Change file to your favorite prototyping tool, test it, and bring the verdict back to `/cs-spec`.
+   - Builds on the same Change file to define target workflows, user/software/agent responsibilities, acceptance scenarios, `Solution Coverage` (accounting for every `PS-*`), and explicit `Out of Scope` guardrails.
+   - *Optional external prototyping*: If a UX or interaction choice is hard to judge in text, the agent flags it as a `Prototype Candidate`. Take the self-contained Change file to your prototyping tool, test it, and bring the verdict back to `/cs-spec`.
 
 3. **Plan the software design (`/cs-design`)**
    ```text
    /cs-design
    ```
    - Reads the active Change spec and your codebase, separates Policy from Mechanism, checks boundary trust, and prints a **Quick** or **Full** design plan right in chat.
-   - Resolve any flagged *What-level* decision, then simply tell your coding agent to execute the plan inside-out.
+   - Resolve any flagged *What-level* decision, then execute the plan inside-out.
 
-4. **Reflect & merge knowledge (`/cs-reflect`)**
+4. **Reflect & synchronize knowledge (`/cs-reflect`)**
    ```text
    /cs-reflect
    ```
-   - Run right after implementation while the task trace is still fresh.
-   - Reviews routing friction (`Missing Path`), shortcuts (`Boundary Bypass`), and ownership gaps (`Unowned Capability`), and proposes exact updates to merge the completed Change back into your Living Knowledge.
+   - Run right after implementation while the execution trace is still fresh.
+   - Surfaces routing friction (`Missing Path`), shortcuts (`Boundary Bypass`), and ownership gaps (`Unowned Capability`), explains what practice revealed, and proposes exact updates to merge the completed Change back into your Living Knowledge.
    - Nothing is modified until you explicitly approve which repairs or merges to apply.
 
 ---
@@ -108,9 +126,9 @@ You do **not** have to run all four skills every time:
 
 ```text
 .cstack/
-├── index.md                    # Maps your Living Knowledge (any layout) + Active Changes
+├── index.md                    # Thin map to your Living Knowledge (any layout) + Active Changes
 ├── changes/
-│   └── <change-id>.md          # Single file holding Explore + Spec + Merge Notes for one change
+│   └── <change-id>.md          # Single self-contained file for Explore + Spec + Merge Notes
 └── friction.log                # Optional side-band log (if friction-tracker rule is enabled)
 ```
 
@@ -120,7 +138,8 @@ Your existing `docs/`, `GLOSSARY.md`, `architecture-map.md`, or ADRs stay wherev
 
 ## Further Reading
 
-- [Context Minimization Principle (CMP)](https://www.contextcost.dev/) — The theoretical foundation behind `cstack`
+- [Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/) — The context-cost design foundation behind `cstack`
+- [Reflective Bootstrapping](https://www.airic.dev/research/reflective-bootstrapping/): How Agents Turn Practice into Institutional Knowledge — The theory behind `/cs-reflect` and human-AI knowledge synchronization
 - [`docs/prd.md`](docs/prd.md) — Full Product Requirements Document & methodology rationale
-- [`skills/`](skills/) — Direct canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-design`, `cs-reflect`)
+- [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-design`, `cs-reflect`)
 - [`agents/cstack-explorer.md`](agents/cstack-explorer.md) & [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — Optional shared read-only explorer subagent and compaction-safe friction tracker

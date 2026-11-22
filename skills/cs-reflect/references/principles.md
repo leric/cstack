@@ -17,7 +17,7 @@ Audit changeability, architecture conformance (discoverability, boundary trust, 
 
 ## Authority Before Repair & Merge
 
-Default to **Report mode**. A reflection request authorizes inspection and recommendations, not writes. Enter **Repair / Merge mode** only when the user explicitly authorizes applying findings or merging Change deltas into Living Knowledge.
+Default to **Report mode**. A reflection request authorizes inspection and recommendations, not writes. Human review in Report mode serves two roles: **governance** (deciding which repairs or merges are authorized) and **two-way knowledge synchronization** (the human learns what practice exposed behind the final diff, and supplies domain or organizational context to confirm, narrow, or reject the agent's interpretation). Enter **Repair / Merge mode** only when the user explicitly authorizes applying findings or merging Knowledge Deltas into Living Knowledge.
 
 Classify every proposed action as:
 - **How-level** — action inside an already-authorized behavior, owner, boundary, or placement convention (e.g. fix a stale pointer, add a closure index comment, improve a focused test, route through an existing port, remove duplication in favor of an existing owner, merge unconflicted realized deltas into registered Living Knowledge).

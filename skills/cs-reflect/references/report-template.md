@@ -30,6 +30,14 @@ Keep the report concise. Use `—` where a field does not apply.
 | Boundary Bypass | `found | not-found | unknown` | | | | `how-level | what-level | —` |
 | Unowned Capability | `found | not-found | unknown` | | | | `how-level | what-level | —` |
 
+## Practice Discoveries & Expectation Gaps
+
+*(Report only non-obvious friction discoveries or deviations from expected outcome; write `None` if execution matched expectations.)*
+
+- **Expected vs. actual**:
+- **Evidence & uncertainty / scope**:
+- **Candidate Knowledge Delta & destination**: `keep local | Living Knowledge | guidance | /cs-spec | /cs-explore`
+
 ## Recommended Response
 
 - Priority: `Do now | Schedule later | Just note | None`
@@ -38,12 +46,12 @@ Keep the report concise. Use `—` where a field does not apply.
 - Human decision required:
 - Cross-stage feedback *(only if root cause belongs in `/cs-spec` or `/cs-explore`, else `None`)*:
 
-## Living Knowledge Merge Proposal *(omit if no active Change file applies)*
+## Living Knowledge Merge Proposal *(omit only if neither an active Change file nor a practice-discovered Knowledge Delta applies)*
 
-- Active Change file: `<changes-dir>/<change-id>.md`
+- Active Change file: `<changes-dir>/<change-id>.md` *(or `None — practice-discovered delta only`)*
 - Target Living Knowledge / Architecture Map updates:
 - Conflicts with direct human edits to Living Knowledge: `None` or explicit diff/question
-- Index closeout: Mark `<change-id>` as `merged` in `.cstack/index.md` upon authorization.
+- Index closeout: Mark `<change-id>` as `merged` in `.cstack/index.md` upon authorization *(if an active Change file applies)*.
 
 ## Learning Feedback
 
