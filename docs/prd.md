@@ -13,7 +13,7 @@
 
 cstack 是一套面向 AI Coding Agents 的软件工程 Skills，整合成熟的软件工程方法与 AI 驱动的工作流程，帮助开发者完成从业务知识发现、产品设计到软件设计及持续演化的工作。
 
-cstack 不试图取代 Coding Agent，也不重新实现通用的编码、测试、Review、原型制作（Prototype）和交付能力。
+cstack 不试图取代 Coding Agent，也不重新实现通用的编码、测试、Review、原型制作和交付工具。
 
 它专注于软件开发中更依赖经验、判断力和知识积累的四个认知动作：
 
@@ -219,7 +219,7 @@ Spec 不是单纯的需求文档生成，也不是被动记录客户提出的功
   - 尚未解决
   
   产品不能未经确认就静默丢弃客户提出的重要要求。
-- **SPEC-05 Product Decision Making & External Prototype Handoff：** 对候选方案进行分析和比较，区分已确认领域事实、产品设计选择与尚未证实的产品假设。对于纯文字难以判断体验/视觉/交互直觉的假设，显式标记为适合交给**外部 Prototype 工具**验证的条目；cstack 本身不内置原型工具，但确保 Change Spec 足够自包含以便直接喂给外部工具，并支持将验证结论回写进 Spec。
+- **SPEC-05 Product Decisions & HTML Sketches：** 对候选方案进行分析和比较，区分已确认领域事实、产品设计选择与尚未证实的产品假设。当文字难以表达当前讨论的布局、交互或状态转换时，用单个可直接打开的 HTML 文件画出草图。围绕当前问题展示必要细节，由用户确认后将行为、决策及理由写回 Change Spec。草图保存在临时空间，讨论结束后可丢弃。
 - **SPEC-06 Brownfield Fast-Path：** 对于小规模增量变更，允许直接从 `/cs-spec` 进入，在读取知识库索引后内联完成轻量知识缺口检查；仅当发现陌生领域、深层概念冲突或复杂隐藏约束时，显式建议切回 `/cs-explore`。
 
 #### 输出知识（写入当前 Change 文件）
@@ -228,7 +228,7 @@ Spec 不是单纯的需求文档生成，也不是被动记录客户提出的功
 - Features & Capabilities
 - Behavior Specifications & Acceptance Scenarios
 - Solution Coverage Table (`PS-*`)
-- Product Decisions, Trade-offs & External Prototype Candidates
+- Product Decisions, Trade-offs & Open Questions
 - Out of Scope (Explicit Refusals)
 - Preliminary Living Knowledge Merge Notes
 
@@ -313,7 +313,7 @@ cstack 不强行规定用户代码库的文档目录体系，但为避免 Agent 
    - **Living Knowledge 地图：** 现有领域知识、产品行为、架构索引分别位于仓库何处（用户完全自由组织，如 `docs/`、`GLOSSARY.md`、代码注释、ADR 等，不做结构限制）。
    - **Changes 目录位置：** 默认 `.cstack/changes/`（可在 `index` 中指定其他路径）。
    - **Active Changes 列表：** 当前进行中的 Change 文件及其状态（`exploring` | `speccing` | `ready-for-design` | `merged`）。
-2. **单文件 Change（`<changes-dir>/<change-id>.md`）：** 一次变更的所有增量内容（Problem & Proposed Solutions、Domain Delta、Product Design & Behavior Spec、Merge Notes）集中放在**一个 Markdown 文件**里，局部化上下文足迹，便于跨阶段往复、直接交给外部 Prototype 工具、以及最终统一合并。
+2. **单文件 Change（`<changes-dir>/<change-id>.md`）：** 一次变更的所有增量内容（Problem & Proposed Solutions、Domain Delta、Product Design & Behavior Spec、Merge Notes）集中放在**一个 Markdown 文件**里，局部化上下文足迹，便于跨阶段往复与最终统一合并。Change 独立于讨论中使用的 HTML 草图，包含下游设计和验收所需的完整行为规格。
 
 ### 6.2 两种生命周期
 
@@ -396,7 +396,7 @@ Agent 应主动开展知识发现和设计推理，而不是被动罗列空泛�
 
 - **用户输入：** “我们希望用户选择设备类型后，系统自动推荐适用标准，并据此生成评估任务。”
 - **Explore（写入 `changes/auto-recommend-standards.md` 第 1–2 节）：** 读取 `index` 与已有知识后，完整捕获原案 `PS-1`；通过前沿审问与实例确认：设备存在不同类型与配置、标准适用性受条件约束、“适用标准”与“实际评估范围”是两个不同概念、评估任务需专业人员结合项目确认。
-- **Spec（写入同一 Change 文件第 3 节）：** 基于领域事实设计新工作方式——用户输入设备类型与配置 → 系统识别候选标准及适用条件并解释依据 → 用户确认最终评估范围 → 系统生成评估任务。明确覆盖 `PS-1`（以“推荐+可解释+人工确认”替代全自动静默生成并说明理由），列出 `Out of Scope`；若交互展示形式存在体感不确定性，标为 `Prototype Candidate` 供用户拿该文件去外部原型工具验证后回写结论。
+- **Spec（写入同一 Change 文件第 3 节）：** 基于领域事实设计新工作方式——用户输入设备类型与配置 → 系统识别候选标准及适用条件并解释依据 → 用户确认最终评估范围 → 系统生成评估任务。明确覆盖 `PS-1`（以“推荐+可解释+人工确认”替代全自动静默生成并说明理由），列出 `Out of Scope`。如果难以用文字比较逐条确认与整批确认的体验，用 HTML 草图走一遍推荐、改选和确认的状态，讨论后把确认规则写回 Spec。
 - **Design：** 读取已确认的 Change Spec 与现有代码库，基于 CMP 划定 Policy/UseCase/Port 契约与任务切片，交由 Agent 完成实现与验证。
 - **Reflect：** 发现标准适用性判断在报价与评估两处重复实现（`Unowned Capability`），Flag & Stop 请架构师决策归属；同时将已落地的“适用标准 vs 评估范围”概念与行为变更 Merge 回 Living Knowledge，标记该 Change 为 `merged`。
 
@@ -408,7 +408,7 @@ cstack 不计划：
 
 - 构建新的通用 Coding Agent 或 Harness。
 - 自行实现通用 TDD、Code Review、QA、CI/CD、Shipping 工作流。
-- **内置 Prototype 工具或 UI 原型生成器**（Prototype 属于 Spec 的外部消费工具，用户可携带 Change Spec 对接外部工具，最终沉淀的仍是 Spec 本身）。
+- **内置专用原型制作工具**。用户可携带自包含的 Change Spec 对接外部工具，并把验证结论带回 Spec。
 - 强制使用完整的 DDD、EventStorming、BDD 或 Clean Architecture 模板。
 - 强制规定 Living Knowledge 的文件目录结构。
 - 将领域知识完整复制到软件 Domain Model，或在文档中复述代码已表达的设计。
@@ -460,7 +460,7 @@ cstack 作为可独立安装的跨 Harness 软件工程 Skills 集合分发（�
 
 1. **Explore 的知识形式化程度：** Change 文件里的 Domain Delta 保持纯语义 Markdown 还是局部使用表格/状态图，才能兼顾推理价值与低维护成本？
 2. **Frontier 追问节奏：** 每轮抛出多少个前沿问题、推荐答案详略到什么程度，最能兼顾收敛效率与反橡皮图章效果？
-3. **Spec 到外部 Prototype 工具的衔接：** Change Spec 第 3 节的哪些信息最能直接被外部原型工具高效消费，而不增加日常无原型任务时的书写负担？
+3. **HTML 草图的使用时机：** 哪类布局、交互和状态变化问题值得在讨论中画出来？用多少细节就能帮助用户作出当前决策？
 4. **Merge 粒度与冲突体验：** 当用户在 Change 进行期间直接手工修正了 Living Knowledge，Reflect 做 Merge 时如何最轻量地检测并提示差异？
 5. **效果验证方法：** 如何在真实连续修改实验中区分模型本身能力与 cstack 方法论带来的收益？
 

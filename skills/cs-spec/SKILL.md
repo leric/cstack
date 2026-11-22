@@ -1,6 +1,6 @@
 ---
 name: cs-spec
-description: Product Design and Behavior Specification skill for cstack. Creatively designs target product models, responsibilities, external behaviors, Solution Coverage, and Out of Scope guardrails into a single-file Change spec ready for external prototyping or Design.
+description: Product Design and Behavior Specification skill for cstack. Creatively designs target product models, responsibilities, external behaviors, Solution Coverage, and Out of Scope guardrails into a single-file Change spec ready for development.
 ---
 
 # `/cs-spec` — Product Design & Behavior Specification
@@ -10,7 +10,6 @@ Design how the target working system *should* operate based on domain reality an
 > **Core Stance — Design the Product, Not a Mirror of Legacy Reality**
 > - Unlike `Explore` (which models reality faithfully), `Spec` is a **creative design** activity: you may reorganize workflows, redefine responsibilities across humans, software, and AI agents, and introduce new product abstractions.
 > - Specify **external observable behaviors**, not internal code structure, fragile file paths, or implementation mechanisms (those belong to `Design`).
-> - `cstack` does **not** build throwaway prototypes internally; instead, keep Section 3 self-contained and flag UX/interaction hypotheses as `Prototype Candidate` so the user can test them in external prototyping tools and feed conclusions back here.
 
 ### CStack Knowledge Contract & Frontier Grilling Protocol
 
@@ -66,8 +65,10 @@ Work the unresolved product design choices in structured **Design Tree + Frontie
 2. **Compare Candidates & Surface Trade-offs**:
    - Explicitly distinguish **Confirmed Domain Facts** (from Section 2), **Product Design Choices**, and **Unvalidated Product Hypotheses**.
    - When a candidate product design deviates from a user's original `PS-*`, explain the trade-off transparently rather than silently overwriting it.
-3. **Flag External Prototype Candidates**:
-   - If a choice hinges on subjective visual layout, multi-step interaction feel, or experiential clarity that cannot be reliably resolved through text alone, mark it explicitly as **`Prototype Candidate`** (stating the exact question to test and 2–3 contrasting directions). The user can take this Change file into an external prototype tool and bring the verdict back to update Section 3.
+3. **Sketch the Current Choice in HTML When Helpful**:
+   - When text leaves the current choice hard to picture, draw it during the discussion. Show only what helps answer the question, such as a screen layout, a side-by-side comparison, or the visible states and transitions of an interaction.
+  - Use a single HTML file and load Bootstrap CSS from a CDN. Use Bootstrap's layout utilities and components to express the sketch. Add inline CSS only for details relevant to the discussion, and use a little vanilla JavaScript if clicking through states helps. Keep the file in scratch space and share it with the question it illustrates.
+   - Discuss the sketch with the user and revise it as needed. Treat depicted choices as proposals until confirmed. If a question needs further validation, record it as open and agree on how to resolve or defer it. Write the agreed behaviors, decisions, and rationale into Section 3 so the Change stands on its own after the sketch is discarded.
 4. **Update Section 3 Inline**:
    - Immediately persist settled product decisions, behaviors, and boundaries into `<changes-dir>/<change-id>.md` after each round. **Do NOT edit Living Knowledge directly** (strict Delta + Merge).
 
@@ -93,10 +94,10 @@ Specification is complete when:
 - Target product behaviors, edge cases, and acceptance scenarios are unambiguous enough to drive `Design`;
 - Every important `PS-*` has an explicitly agreed disposition in `Solution Coverage`;
 - Key Product Decisions and `Out of Scope` boundaries are recorded;
-- Any `Prototype Candidates` are either resolved (with verdicts merged into Section 3) or explicitly accepted as deferred;
+- Open product questions that affect the handoff are resolved in Section 3 or explicitly deferred with the user's agreement;
 - The user **explicitly confirms** the specification.
 
-Upon confirmation, update the Change file status to `ready-for-design` (and update `index`), then summarize the finalized spec and ask whether to proceed to `/cs-design` or take the file to an external prototype tool first.
+Upon confirmation, update the Change file status to `ready-for-design` (and update `index`), then summarize the finalized spec and ask whether to proceed to `/cs-design`.
 
 ---
 
@@ -126,9 +127,9 @@ Write and maintain Sections 3 and 4 inside the **same** `<changes-dir>/<change-i
 | :--- | :--- | :--- | :--- |
 | `PS-1` | <Original proposal> | `Fulfilled as proposed` / `Met via alternative` / `Adjusted or dropped` / `Unresolved` | <Why and where it is addressed> |
 
-### Product Decisions & Prototype Candidates
+### Product Decisions
 - **Decision**: <Choice made> — *Alternatives considered*: <...> — *Rationale*: <...>
-- **Prototype Candidate** *(optional, for external prototyping tools)*: <UX/interaction question to validate externally & candidate directions; update with Verdict once tested>
+- **Open Question** *(if any)*: <Unresolved choice and how to validate it or what deferral the user agreed to>
 
 ### Out of Scope
 - <Explicitly refused feature, edge case, or legacy behavior>

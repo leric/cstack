@@ -70,7 +70,7 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 | Skill | When to Invoke | What You Get |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, legacy overhaul, or user-proposed solution | Code-grounded reconnaissance + dependency-ordered frontier grilling + concrete examples → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
-| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, behavior scenarios, `PS-*` Solution Coverage, `Out of Scope` guardrails, and optional `Prototype Candidate` flags → Sections 3–4 of the same Change file |
+| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, behavior scenarios, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Sections 3–4 of the same Change file |
 | **`/cs-design`** | Before writing non-trivial code | Conversational Quick or Full CMP / Clean Architecture plan: Modification Closure, Policy/Mechanism placement, unresolved *What-level* gates, and an inside-out implementation & test route |
 | **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | Read-only reflection on `Missing Path` / `Boundary Bypass` / `Unowned Capability` + a reviewable proposal to synchronize discoveries with you and merge realized deltas into Living Knowledge (writes only after you approve) |
 
@@ -91,7 +91,7 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
    /cs-spec
    ```
    - Builds on the same Change file to define target workflows, user/software/agent responsibilities, acceptance scenarios, `Solution Coverage` (accounting for every `PS-*`), and explicit `Out of Scope` guardrails.
-   - *Optional external prototyping*: If a UX or interaction choice is hard to judge in text, the agent flags it as a `Prototype Candidate`. Take the self-contained Change file to your prototyping tool, test it, and bring the verdict back to `/cs-spec`.
+   - *HTML sketches when useful*: If a layout, interaction, or state transition is hard to picture in text, the agent can draw it in a standalone HTML file during the discussion. Agreed behavior and decisions go back into the Change file.
 
 3. **Plan the software design (`/cs-design`)**
    ```text

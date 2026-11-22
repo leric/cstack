@@ -68,7 +68,7 @@ npx skills add leric/cstack
 | Skill | 什么时候用 | 产出什么 |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | 需求模糊、进入陌生业务领域、存量系统重构，或用户直接丢来一个解决方案时 | 代码查证 + 按依赖顺序的前沿追问 + 具体实例验证 → 实时写入 `.cstack/changes/<change-id>.md` 第 1–2 节（问题、原案 `PS-*`、领域增量） |
-| **`/cs-spec`** | 准备设计产品工作方式（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、行为验收场景、`PS-*` 覆盖表（`Solution Coverage`）、`Out of Scope` 护栏，以及可选的 `Prototype Candidate` 标记 → 写入同一 Change 文件第 3–4 节 |
+| **`/cs-spec`** | 准备设计产品工作方式（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、行为验收场景、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3–4 节 |
 | **`/cs-design`** | 准备动手写非平凡代码之前 | 在对话中输出 Quick 或 Full 级别的 CMP / Clean Architecture 设计计划：Modification Closure、Policy/Mechanism 归属、未决 *What-level* 门控、由内向外的实现与验证路线 |
 | **`/cs-reflect`** | 完成一次非平凡开发后立刻运行（趁一线执行轨迹还在上下文中） | 默认只读输出简洁反思报告：检测 `Missing Path` / `Boundary Bypass` / `Unowned Capability`，汇报实践中的预期偏差与新知，并给出合并回 Living Knowledge 的提案（经你授权后才落盘） |
 
@@ -88,7 +88,7 @@ npx skills add leric/cstack
    /cs-spec
    ```
    - 在同一个 Change 文件里定义目标工作流、用户/软件/Agent 职责边界、验收场景、逐条对照原案的 `Solution Coverage` 以及明确的 `Out of Scope`。
-   - *对接外部原型工具（可选）*：遇到靠文字难判断体感的交互/界面假设，Agent 会标为 `Prototype Candidate`。你可以直接把这份自包含的 Change 文件交给原型工具试效果，再把结论带回 `/cs-spec`。
+   - *按需画 HTML 草图*：布局、交互或状态变化用文字讲不清时，Agent 可以在讨论中画一个可直接打开的 HTML 草图。讨论确认的行为和决策写回 Change 文件。
 
 3. **规划软件设计并执行（`/cs-design`）**
    ```text
