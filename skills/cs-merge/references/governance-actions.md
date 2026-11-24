@@ -64,7 +64,8 @@ Propose `PRUNE` (direct deletion of a bullet, paragraph, or obsolete doc entry) 
 2. **Contradicted & Superseded (`矛盾`)**:
    - Old rule superseded once a `RESOLVE` conflict or new Product Spec replaces it.
 3. **Internalized into Code (`已被代码内化`)**:
-   - Prose guardrails that existed only to compensate for missing structure (e.g., *"When editing A, always update B"*, *"Callers must normalize X before calling Y"*, `4.3 Code-Internalized Guardrails`) where the final code now enforces the invariant via encapsulation, static types, contract/unit tests, or dependency checks. Once code expresses it reliably, keeping the prose creates future drift risk—delete it.
+   - Prose guardrails that existed only to compensate for missing structure (e.g., *"When editing A, always update B"*, *"Callers must normalize X before calling Y"*, `4.3 Code-Internalized Guardrails`) where the final code now enforces the invariant mechanically via encapsulation, static types/exhaustive unions, contract/unit tests, or lint/dependency checks. Once code expresses it reliably, keeping the prose creates future drift risk—delete it.
+   - *Guardrail*: Fragile visual/CSS layout preconditions (e.g., stacking context, `overflow`, or sticky-scroll invariants) and ungenerated cross-repo contract rules that are **not** mechanically guarded by types, lints, or automated E2E/visual tests are **not** `Code-Internalized` merely because current styling renders properly—preserve them as concise local `Semantic Comments` or Living Knowledge.
 
 **Safety check**: If a `4.3 Code-Internalized Guardrails` clue relied on a refactor that was later reverted before merge, **do not prune**—downgrade or drop the proposal and explain why.
 

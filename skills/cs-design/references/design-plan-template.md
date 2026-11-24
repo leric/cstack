@@ -2,15 +2,16 @@
 
 Print this plan in conversation as a decision-focused alignment tool (do not write a separate design doc). Omit empty rows and sections that add no information.
 
-## 1. Intent, Spec Anchor & Authority
+## 1. Intent, Spec Anchor & Active CMP Case(s)
 
 - Active Change / Spec: *(e.g. `.cstack/changes/<change-id>.md` or "Direct request")*
+- Active CMP Case(s): *(`clean-architecture` | `frontend-architecture` | `clean-architecture + frontend-architecture (full-stack)` | `direct-cmp (lightweight)`)*
 - Intended behavior change:
 - Behavior to preserve:
 - Out of Scope guardrails:
 - Success criteria:
 - Settled product or design decisions:
-- Genuine ambiguities *(flag product ambiguities to resolve via `/cs-spec`)*:
+- Genuine ambiguities *(flag product or UX state ambiguities to resolve via `/cs-spec`)*:
 
 ## 2. Context Route & Modification Closure
 
@@ -23,23 +24,24 @@ Print this plan in conversation as a decision-focused alignment tool (do not wri
 
 | Artifact | Role | Change or verify | Why it belongs to the closure |
 |---|---|---|---|
-|  | primary / sibling / downstream / verification |  |  |
+|  | primary / seam-contract / sibling / downstream / verification |  |  |
 
 ## 3. Policy, Mechanism & CMP Placement
 
-| Concern | Classification | Vertical owner | Horizontal layer / module | Policy / mechanism / boundary / placement | CMP move & evidence |
+| Concern | Classification | Vertical owner | Horizontal layer / slice | Policy / state-owner / contract / mechanism | CMP move & evidence |
 |---|---|---|---|---|---|
 |  |  |  |  |  |  |
 
-- **Classification**: `entity-invariant`, `use-case-policy`, `port-contract`, `adapter-mechanism`, `delivery-mechanism`, `persistence-mechanism`, `mapping-dto-serialization`, `test-verification`, `ownership-placement`, or `architecture-boundary`.
+- **Classification**: Use the concrete concern tags from the loaded CMP Case(s) (e.g., `entity-invariant`, `use-case-policy`, `port-contract`, `adapter-mechanism`, `delivery-mechanism`, `persistence-mechanism` for Clean Architecture; `viewmodel-domain-policy`, `interaction-state-machine`, `state-ownership-boundary`, `server-cache-adapter`, `ui-primitive-mechanism`, `route-feature-composition` for Frontend Architecture; plus `cross-end-seam`, `ownership-needed`, or `placement-review` when applicable).
 - **CMP moves**: `Reduce`, `Relocate`, `Index`, `Check` (note Wrong-shape vs. Unindexed-closure trade-offs if non-obvious).
-- Use `ownership-needed` when no vertical owner is established and `placement-review` when placement is unresolved.
 
-## 4. Boundaries & Human Decisions
+## 4. Boundaries, Cross-End Seam & Human Decisions
 
-| Boundary or capability | Trust | Existing contract or owner | Planned action | Authority |
+| Boundary, state host, or seam | Trust | Existing contract or owner | Planned action | Authority |
 |---|---|---|---|---|
 |  | trusted / verify / untrusted |  |  | how-level / resolved what-level / unresolved what-level |
+
+*(When spanning Backend + Frontend, include a row for the **Cross-Boundary Seam**: canonical contract source, server policy authority vs. UI affordance projection, and UX-driven read/write/error semantics.)*
 
 Unresolved human design gates only:
 
@@ -51,20 +53,15 @@ Write `None` when no unresolved gate exists.
 
 ## 5. Inside-Out Implementation, Contracts & Verification
 
-Pair tests with the layer whose behavior they express. Include only applicable steps:
+Follow the inside-out sequence of the active CMP Case(s), pairing every step with verification at its owning level (include only applicable steps):
 
-1. Specify or test the relevant invariant or use-case behavior.
-2. Implement entity / value-object invariant changes.
-3. Implement the use-case policy narrative.
-4. Define or adjust client-authored ports (keeping provider types outward).
-5. Implement adapter mechanisms and contract/integration tests.
-6. Implement delivery, mapping, persistence, and wiring changes.
-7. Add required Semantic Comments (Semantic Contracts / Modification Closure Indexes only) and run owning-level tests, dependency checks, and necessary E2E coverage.
+- **Single-domain change**: Core invariants / pure ViewModel & state transitions → Use-case policy / headless & cache contracts → Client-authored Ports / DTO boundaries → Adapters, UI primitives, delivery/composition & wiring.
+- **Full-stack change (`clean-architecture + frontend-architecture`)**: Lock core domain policy + Cross-Boundary Contract first → execute Backend inside-out and Frontend inside-out against that locked contract → close with wired end-to-end & live-browser verification.
 
 - Concrete implementation steps:
-- Tests and static checks (by owning level):
+- Tests, static checks & browser verification (by owning level; require live browser check whenever UI layout, CSS stacking, routing, or hydration changes):
 - Semantic contracts / closure indexes to encode in comments *(if any)*:
-- Manual review focus on policy or contract decisions:
+- Manual review focus on policy, UX state, or contract decisions:
 - Later Architecture Map impact *(settled via `/cs-merge`; only if an approved structural route changes)*:
 - Agent may implement now:
 - Agent must not decide without approval:

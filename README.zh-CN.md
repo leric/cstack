@@ -34,8 +34,8 @@
 | 软件开发的核心难题 | `cstack` 的应对方式 | Skill |
 | :--- | :--- | :--- |
 | 需求模糊与过时假设 | **Domain Ontology（领域本体建模）**：先查代码库再发问，忠实捕获原案（`PS-*`），按依赖顺序做短轮次前沿追问与具体实例验证，把真实业务规则与术语边界钉死。 | **`/cs-explore`** |
-| 范围蔓延与产品模型混乱 | **Product Specification（产品行为规格）**：在写代码前明确目标工作流、人/软件/Agent 职责边界、具体验收场景、原案覆盖表（`Solution Coverage`）与显式 `Out of Scope` 拒绝清单。 | **`/cs-spec`** |
-| 结构复杂度不断复利 | **CMP Design（上下文成本驱动设计）**：直接在对话中做由内向外的设计规划（Modification Closure、Policy 与 Mechanism 分离、Boundary Trust），把未决的 *What-level* 决策交给人类拍板，不写冗余设计文档。 | **`/cs-design`** |
+| 范围蔓延与产品模型混乱 | **Product Specification（产品行为规格）**：在写代码前明确目标工作流、人/软件/Agent 职责边界、交互体验与 UI 全状态矩阵（前端场景按需加载）、具体验收场景、原案覆盖表（`Solution Coverage`）与显式 `Out of Scope` 拒绝清单。 | **`/cs-spec`** |
+| 结构复杂度不断复利 | **CMP Design（上下文成本驱动设计）**：以普适 CMP 内核搭配按需加载的领域架构 Case（后端 **Clean Architecture**、前端 **Frontend Architecture**，以及全栈任务的 **Cross-Boundary Seam** 跨端接缝规则），直接在对话中做由内向外规划，不制造用完即废的设计文档。 | **`/cs-design`** |
 | 知识闭环断裂与分支内架构漂移 | **Reflective Bootstrapping（热轨迹诊断与重构）**：任务刚结束趁执行轨迹尚热，检测架构摩擦（`Missing Path`、`Boundary Bypass`、`Unowned Capability`），起草并在授权后就地执行重构方案，完成人机双向认知同步，并将热现场线索写入 Change 文件第 4 节（不提前污染主干文档）。 | **`/cs-reflect`** |
 | 知识库只增不减与文档腐化 | **Diff-Verified Knowledge Governance（局部 GC 与收口）**：合入主干前后无状态运行，对照最终 `git diff` 严格在本次触碰切片内执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`**（外加需确认的 `REMIND` 提醒），分流延后重构项并清理使命完成的 Change 文件。 | **`/cs-merge`** |
 
@@ -69,8 +69,8 @@ npx skills add leric/cstack
 | Skill | 什么时候用 | 产出什么 |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | 需求模糊、进入陌生业务领域、存量系统重构，或用户直接丢来一个解决方案时 | 代码查证 + 按依赖顺序的前沿追问 + 具体实例验证 → 实时写入 `.cstack/changes/<change-id>.md` 第 1–2 节（问题、原案 `PS-*`、领域增量） |
-| **`/cs-spec`** | 准备设计产品工作方式（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、行为验收场景、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节 |
-| **`/cs-design`** | 准备动手写非平凡代码之前 | 在对话中输出 Quick 或 Full 级别的 CMP / Clean Architecture 设计计划：Modification Closure、Policy/Mechanism 归属、未决 *What-level* 门控、由内向外的实现与验证路线 |
+| **`/cs-spec`** | 准备设计产品工作方式（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、交互连续性与 UI 状态矩阵（涉及界面时按需启用）、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节 |
+| **`/cs-design`** | 准备动手写非平凡代码之前 | 在对话中输出 Quick 或 Full 级别的 CMP 设计计划（按需加载 `clean-architecture`、`frontend-architecture` 或双端全栈接缝规则）：Modification Closure、Policy/状态归属/Mechanism 定位、未决 *What-level* 门控、由内向外的实现与验证路线 |
 | **`/cs-reflect`** | 完成一次非平凡开发后立刻运行（趁一线执行轨迹还在上下文中） | 检测 `Missing Path` / `Boundary Bypass` / `Unowned Capability` 并给出 `[R-*]` 重构方案，经你授权就地执行重构（或标为 `defer-to-followup` 防止 PR 蔓延），同步实践新知并将易失的热轨迹线索写入 Change 文件第 4 节 |
 | **`/cs-merge`** | 准备合入或刚合入主干时（支持换用全新 Agent 会话无状态调用） | 对照最终 `git diff`，在触碰切片内对 Living Knowledge 执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** 局部 GC（非失效的冗余路由先提 `REMIND` 提醒确认），分流延后重构项，更新 `index.md` 并默认删除已完成的 Change 文件 |
 
@@ -96,8 +96,8 @@ npx skills add leric/cstack
    ```text
    /cs-design
    ```
-   - 读取活跃 Change 规格与代码库，分离 Policy 与 Mechanism、检查边界可信度，并在对话中直接打印 **Quick** 或 **Full** 设计计划。
-   - 拍板其中标出的未决 *What-level* 决策后，直接交代你的 Coding Agent 按计划由内向外编码即可。
+   - 读取活跃 Change 规格与代码库，按需加载匹配的 CMP 架构 Case（后端 Clean Architecture、前端交互架构，或全栈变更同时加载双 Case + 跨端接缝规则），检查边界可信度，并在对话中直接打印 **Quick** 或 **Full** 设计计划。
+   - 拍板其中标出的未决 *What-level* 决策后，直接交代你的 Coding Agent 按计划由内向外编码验证（涉及界面布局或运行时行为时包含真实浏览器核验）。
 
 4. **反思、就地重构与热轨迹埋点（`/cs-reflect`）**
    ```text
@@ -122,6 +122,7 @@ npx skills add leric/cstack
 
 - **小型增量需求（Brownfield）**：`/cs-spec`（自动内联轻量知识缺口检查）→ `/cs-design` → 实现 → `/cs-reflect` → `/cs-merge`
 - **明确的 Bug 修复 / 重构**：`/cs-design` → 实现 → `/cs-reflect`（若无延后重构与知识库变更则保持零文件开销；仅当存在待沉淀信号时才懒创建精简 Change 文件供 `/cs-merge` 收口）
+- **纯视觉 / 样式细节调优**：不涉及领域规则、状态归属和架构边界变动时，直接结合真实浏览器预览迭代即可
 - **随时回流**：`/cs-design` 发现产品行为含糊就回到 `/cs-spec`；`/cs-spec` 撞见未知业务规则就回到 `/cs-explore`。
 
 ---
@@ -138,7 +139,7 @@ npx skills add leric/cstack
 └── friction.log                # 可选旁路摩擦日志（由 /cs-reflect 提炼消费，在收口时清理）
 ```
 
-项目原本的 `docs/`、`GLOSSARY.md`、`architecture-map.md` 或 ADR 放哪都可以，只需在 `.cstack/index.md` 里登记路径即可。
+项目原本的 `docs/`、`GLOSSARY.md`、`DESIGN.md`、前后端 `architecture-map` 或 ADR 放哪都可以，只需在 `.cstack/index.md` 里登记路径即可。
 
 ---
 

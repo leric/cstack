@@ -189,9 +189,9 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 - **SPEC-01 Product Model Design：** 根据产品目标选择和组织领域概念，构建产品自身的概念模型；允许引入并不存在于原有业务中的产品抽象。
 - **SPEC-02 Responsibility & Workflow Design：** 设计软件、用户、Agent 和其他参与者之间的职责与协作方式，定义目标工作流程、交互行为、决策点和权限约束。
-- **SPEC-03 Behavior Specification & Out of Scope：** 明确外部可观测功能行为、业务规则、状态转换、异常情况与验收条件；同时明确列出 **Out of Scope（显式拒绝清单）**，防止实现阶段范围膨胀。
+- **SPEC-03 Behavior Specification & Out of Scope：** 明确外部可观测功能行为、业务规则、状态转换、异常情况与验收条件；当涉及交互界面时，按需加载交互体验指南（`interactive-ui-spec`）审视空间上下文连续性、乐观反馈/撤销体验、渐进式披露、全量 UI 状态矩阵与跨端接口支撑诉求，避免退化为平庸的数据库表单交互；同时明确列出 **Out of Scope（显式拒绝清单）**，防止实现阶段范围膨胀。
 - **SPEC-04 Solution Coverage：** 逐条对照 Explore 阶段记录的客户原案（`PS-*`），明确每一项的处理方式（原样满足 / 替代方案达成动机 / 协商调整或取消 / 尚未解决），绝不静默丢弃重要诉求。
-- **SPEC-05 Product Decisions & HTML Sketches：** 对候选方案进行分析和比较；当文字难以表达布局、交互或状态转换时，用单个可直接打开的临时 HTML 草图辅助对齐，确认后将行为、决策及理由写回 Change Spec。
+- **SPEC-05 Product Decisions & HTML Sketches：** 对候选方案进行分析和比较；优先锚定项目既有组件库/设计规范，当文字难以表达布局、交互或状态转换时，用单个可直接打开的临时 HTML 草图辅助对齐，确认后将行为、决策及理由写回 Change Spec（草图样式仅作讨论辅助，不带入生产实现）。
 - **SPEC-06 Brownfield Fast-Path：** 对于小规模增量变更，允许直接从 `/cs-spec` 进入并内联完成轻量知识缺口检查；仅当发现深层领域冲突时建议切回 `/cs-explore`。
 
 #### 输出知识（写入当前 Change 文件 Section 3）
@@ -207,19 +207,23 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 ### 5.3 Design — Context-Cost Driven Software Design
 
-**目标：运用 CMP 和 Clean Architecture，将产品行为（或已批准的延后重构提案）转化为清晰的软件设计边界、可执行契约与实现计划，使系统在未来持续修改过程中保持较低的 Context Cost。**
+**目标：运用普适的 CMP 内核与按需加载的领域架构最佳实践 Case，将产品行为（或已批准的延后重构提案）转化为清晰的软件设计边界、状态与跨端契约及实现计划，使系统在未来持续修改过程中保持较低的 Context Cost。**
 
 #### 方法论
 
-以 **Context Minimization Principle（CMP）** 为设计评价框架（沿 **Depth** 与 **Breadth / Modification Closure** 两个维度衡量上下文获取成本，通过 **Reduce / Relocate / Index / Check** 四种变换优化结构），以 **Clean Architecture**（分离 Policy 与 Mechanism，依赖向内）为主要上下文路由实践，但不流于教条。
+以 **Context Minimization Principle（CMP）** 为跨领域统一评价框架（沿 **Depth** 与 **Breadth / Modification Closure** 两个维度衡量上下文获取成本，通过 **Reduce / Relocate / Index / Check** 四种变换优化结构），采用 **“CMP 元内核 + 按场景按需加载具象架构 Case”** 的模块化组织方式（避免用空泛抽象词稀释工程约束）：
+- 服务端/领域模块加载 **Clean Architecture Case**（`Entities → Use Cases → Ports → Adapters`）；
+- 前端/富交互模块加载 **Frontend Architecture Case**（垂直特性内聚、五类单一状态真源归属、DTO 隔离与缓存失效闭包、无业务感知 UI 原语、真实浏览器闭环验证）；
+- 跨前后端全栈变更同时加载双端 Case 并激活 **Cross-Boundary Seam（跨端接缝规则）**（锁定唯一契约锚点、服务端权威策略与客户端可操作性投射、体验驱动接口语义、契约铰链式双端由内向外推进）；
+- `Architecture Map` 按仓库物理拓扑决定拆分粒度（前后端分离/Monorepo 维护两份专属地图 + 跨端契约指针；紧凑全栈单体先维护一份分节地图，待触发粗粒度路由噪音提醒时再拆分）。
 
 #### 核心能力
 
-- **DES-01 Context Cost Analysis：** 分析哪些行为改变、哪些保持不变，评估 Depth/Breadth 成本与现有边界可信度。
-- **DES-02 Policy & Mechanism Separation：** 采用由内向外的设计顺序（`Entities → Use Cases → Ports → Adapters`），Port 契约由使用方语言定义。
+- **DES-01 Context Cost Analysis & Case Routing：** 分析哪些行为改变、哪些保持不变，按触碰技术面按需挂载具象架构 Case（支持未来继续扩展数据流水线、Agent 系统、SDK 等领域 Case），评估 Depth/Breadth 成本与现有边界可信度。
+- **DES-02 Policy, State & Mechanism Separation：** 采用各领域原生的由内向外设计顺序（后端分离领域/用例策略与基础设施机制；前端明确单一状态宿主、分离纯计算/状态机与视图原语；全栈先锁跨端契约与领域策略）。
 - **DES-03 Context Transformation：** 权衡 Boundary Cost / Carrying Depth，平衡过早抽象（Wrong-shape Risk）与散落失联（Unindexed-closure Risk）。
-- **DES-04 Architecture as Context Routing：** 明确能力垂直归属与水平层级，守卫依赖方向。
-- **DES-05 Executable Design & Implementation Planning：** 在对话中输出 Quick 或 Full 设计计划（不制造冗余设计文档），确认未决 What-level Gate 后即可由内向外编码验证。
+- **DES-04 Architecture as Context Routing：** 明确能力垂直归属、状态真源与水平边界，守卫依赖方向与跨端契约闭包。
+- **DES-05 Executable Design & Owning-Level Verification Planning：** 在对话中输出 Quick 或 Full 设计计划（不制造冗余设计文档），确认未决 What-level Gate 后即可由内向外编码并在归属层验证（涉及 UI 布局/样式/运行时必须包含真实浏览器核验）。
 - **DES-06 Semantic Comments & Context Indexing：** 注释仅承载语言无法直接表达的 **Semantic Contracts** 与 **Modification Closure Indexes**，严禁复述代码或为架构捷径找借口。
 
 **完成标准：** 软件责任边界、核心契约与依赖约束明确表达，且引入的 Context Cost 与其为当前及未来修改带来的收益相符。

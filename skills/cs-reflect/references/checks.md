@@ -15,9 +15,9 @@ Every actionable `found` check produces a structured **`[R-*]` Refactor Proposal
 **Question**: Was context that should have been reachable through an established route unnecessarily hard to find?
 
 Evidence includes:
-- A relevant helper, schema, test, registry, or implementation was found only after avoidable broad searching.
-- Related artifacts had to change together but were not connected by naming, placement, imports, tests, Semantic Comments / Closure Indexes, or an Architecture Map.
-- A misleading route pointed to the wrong owner or almost caused an existing capability to be reimplemented.
+- A relevant helper, schema, UI primitive, query key, test, registry, or implementation was found only after avoidable broad searching.
+- Related artifacts had to change together (including mutation → query-cache invalidation closures, URL search-param ↔ view state bindings, theme/i18n token sets, or ungenerated Backend ↔ Frontend contract seams) but were not connected by naming, placement, imports, key factories, tests, Semantic Comments / Closure Indexes, or an Architecture Map.
+- A misleading route pointed to the wrong owner or almost caused an existing capability or UI primitive to be reimplemented.
 - The same sibling location was missed more than once during the task.
 
 Do not fire when the modification closure is broad by nature and the architecture already makes its consumers discoverable.
@@ -37,30 +37,33 @@ Creating a new registry, shared abstraction, or ownership rule is **what-level**
 **Question**: Did the change bypass, duplicate, or weaken an established boundary?
 
 Evidence includes:
-- A layer accessed private state, low-level details, or another layer's implementation type.
-- Code bypassed an existing service, port, adapter, repository, validator, policy, state machine, or API contract.
-- Boundary-owned logic was duplicated in another consumer.
-- Tests passed through a direct route that production code must not copy.
+- A layer accessed private state, low-level details, or another layer/feature's internal type.
+- Code bypassed an existing service, port, adapter, repository, validator, policy, state machine, query-cache adapter, Design System primitive/token, or cross-end API contract.
+- Raw backend transport DTOs penetrated deep into UI components, or backend domain/permission conditionals were duplicated in frontend JSX instead of projected across the contract.
+- Computable derived UI state or URL/server-cache truth was copied into local state and synchronized via `useEffect`.
+- Tests passed through a direct route that production code must not copy (or JSDOM unit tests were treated as visual/browser proof when CSS layout, stacking, or hydration changed).
 - The patch weakened dependency direction, public contract semantics, or introduced an excuse comment justifying a shortcut.
 
 **Future risk**: Later changes must reason about internals the boundary was meant to hide, or copy the bypass.
 
 Allowed **how-level** refactor responses (when the intended boundary already exists):
-- Route the call through the existing public contract or port.
-- Replace duplication with the existing canonical owner.
-- Add a contract test or static dependency guard enforcing an already-established rule.
+- Route the call through the existing public contract, port, query adapter, or Design System primitive/token.
+- Replace duplication (or `useEffect` derived-state sync) with the existing canonical owner or pure derivation.
+- Add a contract test or static dependency/import guard enforcing an already-established rule.
 - Correct a misleading boundary method name or local Semantic Contract comment.
 
-Creating or redrawing a boundary or changing port semantics is **what-level** (present concrete options for human decision before executing in `/cs-reflect` or deferring via `defer-to-followup`).
+Creating or redrawing a boundary or changing port/contract semantics is **what-level** (present concrete options for human decision before executing in `/cs-reflect` or deferring via `defer-to-followup`).
 
 ## 3. Unowned Capability
 
-**Question**: Did the task reveal behavior whose architectural owner cannot be predicted?
+**Question**: Did the task reveal behavior or state whose architectural owner cannot be predicted?
 
 Evidence includes:
 - Similar logic exists in multiple locations with no canonical owner.
+- The same UI/domain state truth is duplicated across competing hosts (URL params, server query cache, client store, and local component state) with no clear Single Source of Truth.
+- A shared UI component accumulated ad-hoc boolean mode props across screens (`Wrong-shape Risk`), or components escalated magic `z-index` / overlay rules without a shared elevation owner.
 - A new helper appears reusable but its current placement was chosen for convenience.
-- A rule spans modules and no existing entity, policy, service, adapter, or Architecture Map names an owner.
+- A rule spans modules (or spans Backend and Frontend) and no existing entity, policy, service, contract, state host, or Architecture Map names an owner.
 - Different consumers resolve the same decision independently.
 
 **Future risk**: Later modifiers cannot find the behavior, choose inconsistent placements, or reinvent it.

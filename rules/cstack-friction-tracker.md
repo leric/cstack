@@ -13,10 +13,10 @@ Context compaction erases first-hand search and edit friction before post-task r
    - Trigger: $>3$ failed or unrelated file reads/greps to locate a domain concept, handler, or coupled co-change site.
    - Format: `<ISO-timestamp> [MISSING_PATH] <searched concept> -> <detour taken> -> <actual location>`
 2. **Boundary Friction (`[BOUNDARY_BYPASS]`)**:
-   - Trigger: Backing out of an architectural interface, reaching across layers (e.g., Domain/UseCase importing Infrastructure/UI), or passing raw transport/DB shapes across a boundary to make a change work.
+   - Trigger: Backing out of an architectural interface, reaching across layers (e.g., Domain/UseCase importing Infrastructure/ORM, UI views importing raw backend DTOs or bypassing Design System primitives/tokens, or syncing computable derived state via `useEffect`).
    - Format: `<ISO-timestamp> [BOUNDARY_BYPASS] <source file/layer> -> <target file/layer>: <why boundary felt obstructive>`
 3. **Orphan Creation (`[UNOWNED_CAPABILITY]`)**:
-   - Trigger: Creating a helper, validator, mapper, formatter, or policy rule without an obvious single domain owner.
+   - Trigger: Creating a helper, validator, mapper, formatter, policy rule, or duplicated UI state/overlay logic without an obvious single canonical owner.
    - Format: `<ISO-timestamp> [UNOWNED_CAPABILITY] <symbol@file>: <capability created without clear canonical owner>`
 
 Do not narrate friction logging to the user—append silently to `.cstack/friction.log` and continue working.

@@ -55,20 +55,22 @@ Design how the target working system *should* operate based on domain reality an
 3. **Brownfield Fast-Path (Direct Spec Invocation)**:
    - If invoked directly without a prior `Explore` session on a **small, well-understood incremental change**: inspect Living Knowledge and the codebase (using `cstack-explorer` for broad lookups), create `<changes-dir>/<change-id>.md`, register it in `index`, and fill in concise Sections 1 and 2 (including any user-proposed `PS-*`) inline.
    - If you uncover unfamiliar domain rules, major terminology conflicts, or deep hidden constraints: **pause and recommend switching to `/cs-explore`** before locking product behavior.
-4. Set the Change file status to `speccing` (and reflect it in `index`).
+4. **Load Interactive UI Lens When Applicable (On-Demand)**:
+   - When the Change includes a user-facing interactive interface (Web, Desktop, Mobile, or rich TUI), read [`references/interactive-ui-spec.md`](references/interactive-ui-spec.md) before grilling so you check existing Design System primitives first and design spatial continuity, feedback immediacy, and complete UI states instead of defaulting to naive CRUD forms/modals. Skip it for headless backend/API/job tasks.
+5. Set the Change file status to `speccing` (and reflect it in `index`).
 
 ### Step 2: Product Model & Responsibility Frontier Grilling
 Work the unresolved product design choices in structured **Design Tree + Frontier** rounds:
 1. **Product Model & Responsibilities**:
-   - Propose how domain concepts should be shaped into product abstractions and how responsibilities divide across **Users**, **Software**, **AI Agents**, and **External Systems**.
-   - Define target workflows, decision points, handoffs, and authority/permission rules.
+   - Propose how domain concepts should be shaped into product abstractions and how responsibilities divide across **Users**, **Software** (including Client UX vs. Server Authority when full-stack), **AI Agents**, and **External Systems**.
+   - Define target workflows, decision points, handoffs, and authority/permission rules (plus spatial continuity, optimistic/undo ergonomics, and progressive disclosure when `interactive-ui-spec.md` applies).
 2. **Compare Candidates & Surface Trade-offs**:
    - Explicitly distinguish **Confirmed Domain Facts** (from Section 2), **Product Design Choices**, and **Unvalidated Product Hypotheses**.
    - When a candidate product design deviates from a user's original `PS-*`, explain the trade-off transparently rather than silently overwriting it.
 3. **Sketch the Current Choice in HTML When Helpful**:
    - When text leaves the current choice hard to picture, draw it during the discussion. Show only what helps answer the question, such as a screen layout, a side-by-side comparison, or the visible states and transitions of an interaction.
-  - Use a single HTML file and load Bootstrap CSS from a CDN. Use Bootstrap's layout utilities and components to express the sketch. Add inline CSS only for details relevant to the discussion, and use a little vanilla JavaScript if clicking through states helps. Keep the file in scratch space and share it with the question it illustrates.
-   - Discuss the sketch with the user and revise it as needed. Treat depicted choices as proposals until confirmed. If a question needs further validation, record it as open and agree on how to resolve or defer it. Write the agreed behaviors, decisions, and rationale into Section 3 so the Change stands on its own after the sketch is discarded.
+   - Use a single HTML file in scratch space (loading Bootstrap CSS from a CDN or minimal clean CSS, plus light vanilla JavaScript if clicking through states helps) and align with the repository's existing component concepts rather than inventing conflicting widget patterns.
+   - Discuss the sketch with the user and revise it as needed. Treat depicted choices as proposals until confirmed, and treat sketch markup/CDN classes strictly as disposable discussion aids. Write the agreed behaviors, state rules, decisions, and rationale into Section 3 so the Change stands on its own after the sketch is discarded.
 4. **Update Section 3 Inline**:
    - Immediately persist settled product decisions, behaviors, and boundaries into `<changes-dir>/<change-id>.md` after each round. **Do NOT edit Living Knowledge directly** (strict Delta + Merge).
 
@@ -76,6 +78,7 @@ Work the unresolved product design choices in structured **Design Tree + Frontie
 Before closing `Spec`, ensure Section 3 of `<changes-dir>/<change-id>.md` completely covers:
 1. **External Behavior & Acceptance Scenarios**:
    - Express key capabilities, state transitions, edge cases, failure/error semantics, and acceptance criteria using clear natural language, concrete examples, and Given-When-Then where helpful (do not force rigid Gherkin boilerplate).
+   - For interactive UI changes, ensure non-happy-path UI states (empty, loading/optimistic, partial failure, overflow, URL/refresh/Back behavior) and any UX-driven cross-end expectations (e.g., zero-waterfall view data, undo/idempotency, field-level errors) are explicit.
    - Focus strictly on **externally observable behavior** so downstream tests verify behavior rather than internal implementation details.
 2. **Mandatory Solution Coverage (`PS-*`)**:
    - Account for **every** `PS-*` recorded in Section 1 using one of four dispositions:
