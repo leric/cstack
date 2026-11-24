@@ -62,6 +62,6 @@ Keep the map a stable **Context Routing Index**, not a mirror of implementation 
 
 - Record only approved, durable structural facts that make future context navigation cheaper.
 - Verify task-relevant entries against code before relying on them.
-- Update the map after authorized implementation creates, moves, or resolves a structural route (or during `/cs-reflect` merge).
+- Update the map after authorized implementation creates, moves, or resolves a structural route (typically settled during `/cs-merge`).
 - Report an unresolved owner or boundary; never settle it through documentation alone.
 - Remove entries that merely duplicate obvious code or are too detailed to remain stable.

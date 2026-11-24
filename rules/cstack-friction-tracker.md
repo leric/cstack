@@ -20,3 +20,7 @@ Context compaction erases first-hand search and edit friction before post-task r
    - Format: `<ISO-timestamp> [UNOWNED_CAPABILITY] <symbol@file>: <capability created without clear canonical owner>`
 
 Do not narrate friction logging to the user—append silently to `.cstack/friction.log` and continue working.
+
+### Lifecycle
+- **Consumed by `/cs-reflect`**: Read alongside the live task trace to draft `[R-*]` Refactor Proposals and Change File Section 4 (`Reflection & Merge Handoff`).
+- **Cleared on closeout**: Cleared by `/cs-merge` when closing the Change lifecycle (or by `/cs-reflect` directly on zero-overhead Fast-Path tasks that require no Change file).

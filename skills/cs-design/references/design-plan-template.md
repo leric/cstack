@@ -65,7 +65,7 @@ Pair tests with the layer whose behavior they express. Include only applicable s
 - Tests and static checks (by owning level):
 - Semantic contracts / closure indexes to encode in comments *(if any)*:
 - Manual review focus on policy or contract decisions:
-- Later Architecture Map / Merge Notes update *(only if an approved structural route changes)*:
+- Later Architecture Map impact *(settled via `/cs-merge`; only if an approved structural route changes)*:
 - Agent may implement now:
 - Agent must not decide without approval:
 - Next step: `proceed` / `resolve gate` / `return to /cs-spec` / `inspect more context`

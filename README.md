@@ -4,7 +4,7 @@
 
 *Discover the domain. Design the product. Evolve the code.*
 
-`cstack` is a lightweight set of **4 AI software engineering skills** built on **Domain Ontology**, the **[Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/)**, and **Reflective Bootstrapping**. Following the open Agent Skills (`SKILL.md`) standard, it works out of the box with your coding agents.
+`cstack` is a lightweight set of **5 AI software engineering skills** built on **Domain Ontology**, the **[Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/)**, and **Reflective Bootstrapping**. Following the open Agent Skills (`SKILL.md`) standard, it works out of the box with your coding agents.
 
 ---
 
@@ -18,10 +18,10 @@ In real brownfield systems, requirements rarely arrive clean. Domain concepts dr
 ### 2. Compounding Complexity (Architectural Decay in Fast-Forward)
 Cheap code accelerates entropy. Every fast, locally reasonable AI change adds another special case, quietly bypasses a boundary, or leaves a legacy flow half-alive beside a new one. Over time, **structural complexity compounds**: making even a small change requires understanding dozens of scattered files just to stay safe, and routine edits begin breaking distant invariants.
 
-### 3. The Broken Learning Loop (Delegation Cuts Off the Source of Knowledge)
+### 3. The Broken Learning Loop & Knowledge Entropy (Evaporating Insights, Rotting Docs)
 **Practice produces knowledge.** In complex software engineering, deep understanding rarely comes from upfront design alone—it emerges when plans collide with reality: a missing prerequisite, an unexpected constraint, a leaky boundary, or an undocumented convention discovered only while doing the work.
 
-When we delegate execution to coding agents, **the agent sits where plans meet reality, while the human only sees the finished diff.** Little of what was learned survives in the final commit: a working patch doesn't show the misleading doc that sent the agent down the wrong path, the hidden coupling it had to work around, or the legacy flow still overlapping the new one. Once the chat closes, that hard-won knowledge evaporates. Future agents repeat the same friction, Living Knowledge rots, and—most dangerously—**the human owner's mental model quietly detaches from the real system.**
+When we delegate execution to coding agents, **the agent sits where plans meet reality, while the human only sees the finished diff.** Once the chat closes, hard-won discoveries evaporate—and **the human owner's mental model quietly detaches from the real system.** Worse still, even teams that write docs fall into the **append-only trap**: stale warnings, contradicted rules, and piecemeal caveats pile up in the knowledge base, turning yesterday's notes into tomorrow's context bloat and AI-amplified slop.
 
 ---
 
@@ -31,23 +31,24 @@ When we delegate execution to coding agents, **the agent sits where plans meet r
 >
 > *Context Minimization Principle (CMP): For the modifications a system must realistically support, prefer the design whose sufficient context is cheaper to acquire.*
 
-`cstack` does not reinvent coding, TDD, or code review. Instead, it brings three complementary disciplines into four lightweight working modes—where *context cost* isn't about token spend, but how much of the system a human or agent must understand and inspect to make a safe change:
+`cstack` does not reinvent coding, TDD, or code review. Instead, it brings three complementary disciplines into five lightweight working modes—where *context cost* isn't about token spend, but how much of the system a human or agent must understand and inspect to make a safe change:
 
 | The Remaining Hard Problem | How `cstack` Handles It | Skill |
 | :--- | :--- | :--- |
 | Ambiguous goals & obsolete assumptions | **Domain Ontology**: Audits your codebase first, captures proposals faithfully (`PS-*`), and runs short dependency-ordered frontier grilling with concrete examples to nail down real domain rules & terminology. | **`/cs-explore`** |
 | Scope creep & muddy product models | **Product Specification**: Defines target workflows, human/software/agent responsibilities, concrete acceptance scenarios, `PS-*` Solution Coverage, and explicit `Out of Scope` guardrails before coding. | **`/cs-spec`** |
 | Compounding structural complexity | **CMP Design**: Plans inside-out right in conversation (Modification Closure, Policy vs. Mechanism, Boundary Trust) and surfaces unresolved *What-level* human decisions—with zero redundant design docs. | **`/cs-design`** |
-| Broken learning loop & silent decay | **Reflective Bootstrapping**: Examines friction in the live execution trace right after implementation (`Missing Path`, `Boundary Bypass`, `Unowned Capability`) and runs human-reviewed **two-way knowledge synchronization**—bringing discoveries back to the human owner while merging realized Knowledge Deltas into Living Knowledge. | **`/cs-reflect`** |
+| Broken learning loop & in-branch structural drift | **Reflective Bootstrapping**: Examines friction in the live execution trace right after coding (`Missing Path`, `Boundary Bypass`, `Unowned Capability`), executes approved refactors, syncs discoveries with the human owner, and records handoff notes into the Change file without prematurely mutating trunk docs. | **`/cs-reflect`** |
+| Knowledge entropy & append-only doc rot | **Diff-Verified Knowledge Governance (Local GC)**: Statelessly reconciles the Change file against the final `git diff` at merge time to curate Living Knowledge via **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** (+ confirm-first reminders) strictly within the touched slice, routes deferred refactors, and cleans up retired Change files. | **`/cs-merge`** |
 
 ---
 
 ## Design Philosophy
 
 1. **Model the domain, design the product, build for modification** — Understanding business reality (`Explore`), creatively designing a better workflow (`Spec`), and structuring evolvable code (`Design`) are distinct cognitive activities. Mixing them creates muddy abstractions.
-2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary design artifacts. `cs-design` plans in conversation rather than generating disposable design docs.
-3. **Practice feeds Living Knowledge (Strict Delta + Merge)** — In-flight changes live in a single self-contained file (`.cstack/changes/<change-id>.md`) until implemented, then discoveries from execution merge back into Living Knowledge during reflection. No forced doc hierarchy.
-4. **Human review as governance *and* knowledge synchronization** — AI handles codebase reconnaissance, structured grilling, option comparison, and friction detection. Humans own unresolved *What-level* decisions—and review is where lessons from delegated practice flow back into human understanding.
+2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary design artifacts. `cs-design` plans in conversation rather than generating disposable design docs, and prose guardrails retire once internalized into code or tests.
+3. **Strict Delta + Merge with Local GC** — In-flight changes live in a single self-contained file (`.cstack/changes/<change-id>.md`). `/cs-reflect` captures hot execution-trace signals into the Change file right after coding; `/cs-merge` atomically curates and prunes Living Knowledge when landing, then deletes the completed Change file so dead specs never become search noise.
+4. **Human review as governance *and* knowledge synchronization** — AI handles codebase reconnaissance, structured grilling, option comparison, friction detection, and touched-slice GC proposals. Humans own unresolved *What-level* decisions—and review is where lessons from delegated practice flow back into human understanding.
 
 ---
 
@@ -65,14 +66,15 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 
 ## Quick Start: How to Use `cstack`
 
-### The 4 Skills at a Glance
+### The 5 Skills at a Glance
 
 | Skill | When to Invoke | What You Get |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, legacy overhaul, or user-proposed solution | Code-grounded reconnaissance + dependency-ordered frontier grilling + concrete examples → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
-| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, behavior scenarios, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Sections 3–4 of the same Change file |
+| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, behavior scenarios, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Section 3 of the same Change file |
 | **`/cs-design`** | Before writing non-trivial code | Conversational Quick or Full CMP / Clean Architecture plan: Modification Closure, Policy/Mechanism placement, unresolved *What-level* gates, and an inside-out implementation & test route |
-| **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | Read-only reflection on `Missing Path` / `Boundary Bypass` / `Unowned Capability` + a reviewable proposal to synchronize discoveries with you and merge realized deltas into Living Knowledge (writes only after you approve) |
+| **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | CMP friction diagnosis (`Missing Path` / `Boundary Bypass` / `Unowned Capability`) + `[R-*]` Refactor Proposals (executed in-branch once you approve, or deferred) + human sync + Section 4 (`Reflection & Merge Handoff`) written to the Change file |
+| **`/cs-merge`** | When ready to merge / land the change (works statelessly even in a fresh session) | Diff-verified Touched-Slice Local GC (`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE` + confirm-first advisories) on Living Knowledge, explicit routing for any deferred refactors, and cleanup of the completed Change file |
 
 ---
 
@@ -100,36 +102,42 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
    - Reads the active Change spec and your codebase, separates Policy from Mechanism, checks boundary trust, and prints a **Quick** or **Full** design plan right in chat.
    - Resolve any flagged *What-level* decision, then execute the plan inside-out.
 
-4. **Reflect & synchronize knowledge (`/cs-reflect`)**
+4. **Reflect, refactor & capture trace signals (`/cs-reflect`)**
    ```text
    /cs-reflect
    ```
-   - Run right after implementation while the execution trace is still fresh.
-   - Surfaces routing friction (`Missing Path`), shortcuts (`Boundary Bypass`), and ownership gaps (`Unowned Capability`), explains what practice revealed, and proposes exact updates to merge the completed Change back into your Living Knowledge.
-   - Nothing is modified until you explicitly approve which repairs or merges to apply.
+   - Run right after implementation while the execution trace is still hot.
+   - Surfaces routing friction (`Missing Path`), shortcuts (`Boundary Bypass`), and ownership gaps (`Unowned Capability`), syncs unexpected practice discoveries with you, executes approved `[R-*]` refactors in-branch (or marks them `defer-to-followup` to avoid PR scope creep), and records `Section 4 (Reflection & Merge Handoff)` into the Change file without prematurely touching trunk docs.
+
+5. **Govern Living Knowledge & close out (`/cs-merge`)**
+   ```text
+   /cs-merge
+   ```
+   - Run before or upon landing the PR—even days later in a fresh agent session.
+   - Cross-checks the Change file against the final `git diff`, proposes **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** (plus confirm-first reminders for unused/coarse-routed docs) strictly within the touched Living Knowledge slice, routes any deferred refactors so nothing is lost, updates `.cstack/index.md`, and deletes the retired Change file.
 
 ---
 
 ### Fast Paths (Iterative, Not a Rigid Pipeline)
 
-You do **not** have to run all four skills every time:
+You do **not** have to run all five skills every time:
 
-- **Small Brownfield feature**: `/cs-spec` (inlines a quick gap check) → `/cs-design` → implement → `/cs-reflect`
-- **Clear bug fix or refactor**: `/cs-design` → implement → `/cs-reflect`
+- **Small Brownfield feature**: `/cs-spec` (inlines a quick gap check) → `/cs-design` → implement → `/cs-reflect` → `/cs-merge`
+- **Clear bug fix or refactor**: `/cs-design` → implement → `/cs-reflect` *(keeps zero file overhead if clean; lazily writes a compact Change file for `/cs-merge` only when deferred refactors or Living Knowledge deltas exist)*
 - **Mid-flight discovery**: Hit a product ambiguity in `/cs-design`? Jump back to `/cs-spec`. Uncover an unexpected domain rule in `/cs-spec`? Jump back to `/cs-explore`.
 
 ---
 
 ## What `cstack` Creates in Your Repo
 
-`cstack` never forces a documentation folder structure. On first use, it lazily adds only two lightweight anchors:
+`cstack` never forces a documentation folder structure. On first use, it lazily adds only lightweight anchors:
 
 ```text
 .cstack/
 ├── index.md                    # Thin map to your Living Knowledge (any layout) + Active Changes
 ├── changes/
-│   └── <change-id>.md          # Single self-contained file for Explore + Spec + Merge Notes
-└── friction.log                # Optional side-band log (if friction-tracker rule is enabled)
+│   └── <change-id>.md          # Single in-flight file (Explore + Spec + Reflection Handoff; deleted on /cs-merge)
+└── friction.log                # Optional side-band log (consumed by /cs-reflect, cleared on closeout)
 ```
 
 Your existing `docs/`, `GLOSSARY.md`, `architecture-map.md`, or ADRs stay wherever you want—just register them in `.cstack/index.md`.
@@ -141,5 +149,5 @@ Your existing `docs/`, `GLOSSARY.md`, `architecture-map.md`, or ADRs stay wherev
 - [Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/) — The context-cost design foundation behind `cstack`
 - [Reflective Bootstrapping](https://www.airic.dev/research/reflective-bootstrapping/): How Agents Turn Practice into Institutional Knowledge — The theory behind `/cs-reflect` and human-AI knowledge synchronization
 - [`docs/prd.md`](docs/prd.md) — Full Product Requirements Document & methodology rationale
-- [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-design`, `cs-reflect`)
+- [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-design`, `cs-reflect`, `cs-merge`)
 - [`agents/cstack-explorer.md`](agents/cstack-explorer.md) & [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — Optional shared read-only explorer subagent and compaction-safe friction tracker

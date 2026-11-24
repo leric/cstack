@@ -65,7 +65,7 @@ Inspect enough context to choose accurately; do not trigger Full plan merely bec
 ## Planning Workflow
 
 1. **Load cstack Knowledge & Clarify Intent**:
-   - Check `.cstack/index.md` (when present) to locate Living Knowledge (including any registered Architecture Map) and the active Change file (`<changes-dir>/<change-id>.md`).
+   - Check `.cstack/index.md` (when present) to locate Living Knowledge (including any registered Architecture Map) and the active Change file (`<changes-dir>/<change-id>.md`—including any deferred `[R-*]` Refactor Proposal from Section 4.1 when planning a follow-up refactor).
    - State the intended behavior change, behavior to preserve, `Out of Scope` guardrails (from Spec), settled decisions, and genuine ambiguities.
    - **Spec Feedback Loop**: If unresolved product behavior or domain policy ambiguity blocks design, do **not** guess—flag it explicitly and recommend resolving it via `/cs-spec` (or gate it as an unresolved What-level decision).
 2. **Start from the Natural Entry Point**:
@@ -93,7 +93,7 @@ Inspect enough context to choose accurately; do not trigger Full plan merely bec
    - Pair tests with the owning level: entity tests (invariants), use-case tests with fake ports (policy), contract tests (ports), integration tests (adapters), delivery/persistence/mapper tests, and lint/arch checks (dependency direction). Use E2E for cross-system confidence, not as the only policy oracle.
 10. **Defer Routing-Index & Living Knowledge Updates**:
     - Never edit the Architecture Map or Living Knowledge merely to produce a plan, and never settle a new owner/boundary by implication through documentation.
-    - If authorized implementation will add or move a durable structural route, include updating the Architecture Map (and Change file Merge Notes if active) as a post-implementation step.
+    - If authorized implementation will add or move a durable structural route, note it in the plan so `/cs-reflect` records the structural route clue in Change Section 4 and `/cs-merge` settles it into Living Knowledge at merge time.
     - Only if the user explicitly authorizes bootstrapping a new Architecture Map as its own task, use [`references/architecture-map-template.md`](references/architecture-map-template.md) and register its path in `.cstack/index.md`.
 
 ## Final Check

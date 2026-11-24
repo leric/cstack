@@ -17,8 +17,8 @@ Design how the target working system *should* operate based on domain reality an
 - **Routing Index (`index`)**: Always check `.cstack/index.md` first (or a custom index path referenced by the repository). The index is a thin **Context Routing Index** listing:
   1. Where **Living Knowledge** lives (user-defined structure — `docs/`, `GLOSSARY.md`, ADRs, code comments, etc. Never force a rigid directory layout on Living Knowledge).
   2. The **Changes directory** path (default: `.cstack/changes/`).
-  3. **Active Changes** and their status (`exploring` | `speccing` | `ready-for-design` | `merged`).
-- **Single-File Change (`<changes-dir>/<change-id>.md`)**: Store ALL in-flight exploration and product specification deltas for a single change inside **one Markdown file**.
+  3. **Active Changes** and their status (`exploring` | `speccing` | `ready-for-design` | `reflected`; removed once settled by `/cs-merge`).
+- **Single-File Change (`<changes-dir>/<change-id>.md`)**: Store ALL in-flight exploration, product specification, and post-coding reflection clues for a single change inside **one Markdown file** (Sections 1–4).
 - **Lazy Bootstrap**: If `.cstack/index.md` does not exist yet (Greenfield or first use), create a minimal `.cstack/index.md` on first write using this skeleton—do not scaffold extra directories or empty template docs:
   ```markdown
   # Knowledge Index
@@ -36,7 +36,7 @@ Design how the target working system *should* operate based on domain reality an
 
 #### 2. Strict Delta + Merge Discipline
 - **Living Knowledge = Current Realized Reality**: Describes what is currently true about the domain, product behavior, and system. Users may directly edit Living Knowledge at any time to fix inaccurate descriptions of current reality.
-- **Change Knowledge = In-Flight Delta**: Never write unimplemented plans, speculative domain changes, or future behaviors into Living Knowledge during `Explore` or `Spec`. Keep all change-driven deltas inside `<changes-dir>/<change-id>.md` until implementation completes and merges back into Living Knowledge.
+- **Change Knowledge = In-Flight Delta**: Never write unimplemented plans, speculative domain changes, or future behaviors into Living Knowledge during `Explore` or `Spec`. Keep all change-driven deltas inside `<changes-dir>/<change-id>.md` until implementation completes, `/cs-reflect` captures execution-trace signals, and `/cs-merge` settles realized truth into Living Knowledge.
 
 #### 3. Frontier Grilling & Human Authority Protocol
 - **Facts First (Never Ask What Code/Docs Already Know)**: Before questioning the user, read `index`, relevant Living Knowledge, and the codebase (preferring `cstack-explorer` for broad searches so raw search noise stays out of the main context window). Only ask the user questions that require human business judgment, domain truth, or product choice.
@@ -86,8 +86,7 @@ Before closing `Spec`, ensure Section 3 of `<changes-dir>/<change-id>.md` comple
    - **Never silently drop an important customer/user proposal.**
 3. **Explicit `Out of Scope` Refusal List**:
    - Explicitly list excluded capabilities, edge cases, and non-goals—this is the primary guardrail against scope creep during Design and implementation.
-4. **Preliminary Merge Notes (Section 4)**:
-   - List which Living Knowledge files/locations (from `index`) should be updated once this change is implemented and verified.
+   - Do **not** pre-plan documentation updates here; mapping realized changes back into Living Knowledge belongs to `/cs-merge`.
 
 ### Step 4: Exit Gate & Handoff
 Specification is complete when:
@@ -101,9 +100,9 @@ Upon confirmation, update the Change file status to `ready-for-design` (and upda
 
 ---
 
-## Change File Structure Owned by Spec (Sections 3 & 4)
+## Change File Structure Owned by Spec (Section 3)
 
-Write and maintain Sections 3 and 4 inside the **same** `<changes-dir>/<change-id>.md` file:
+Write and maintain Section 3 inside the **same** `<changes-dir>/<change-id>.md` file (preserving Section 4 `Reflection & Merge Handoff` if re-entering an existing Change):
 
 ```markdown
 ## 3. Product Design & Behavior Spec
@@ -133,10 +132,4 @@ Write and maintain Sections 3 and 4 inside the **same** `<changes-dir>/<change-i
 
 ### Out of Scope
 - <Explicitly refused feature, edge case, or legacy behavior>
-
-## 4. Living Knowledge Merge Notes
-<!-- Consumed after implementation & verification (e.g., during Reflect) to merge realized changes back into Living Knowledge. -->
-- **Domain Knowledge to Merge**: <Target Living Knowledge pointer + summary of confirmed additions/revisions>
-- **Behavior Knowledge to Merge**: <Target Living Knowledge pointer + summary of new/changed behaviors>
-- **Architecture Index Impact**: <Expected Architecture Map updates, if known>
 ```
