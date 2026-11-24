@@ -7,7 +7,7 @@ Apply this case when designing **backend services, APIs, workers, CLIs, or domai
 - **Strong fit**: Domain-rich services, transactional workflows, multi-adapter integrations, background orchestrators, and server-side modules in full-stack applications.
 - **No-Dogma Guardrail**: If an endpoint, script, or thin glue module has no meaningful separation between *what* is decided and *how* data is transported/stored, do **not** invent pass-through `UseCase` + `Port` + `Repository` boilerplate that increases Carrying Depth without reducing Context Cost.
 
-## 2. Coordinates & Concern Taxonomy (For Design Plan Section 3)
+## 2. Coordinates & Concern Taxonomy (For Build Plan Section 3)
 
 - **Vertical Owner**: Business capability, bounded context, or application use case (e.g., `billing/invoice-settlement`, `assessment/recommend-standards`).
 - **Horizontal Layers**: `entity`, `use case`, `port`, `adapter`, `delivery`, `persistence`, `mapper`, `test` (drop layers with no real responsibility).
@@ -43,7 +43,7 @@ Rate a touched boundary `untrusted` or `verify` when you spot:
 
 ## 6. Inside-Out Execution, Verification & Architecture Map Schema
 
-### Inside-Out Implementation & Owning-Level Verification (Plan Section 5)
+### Inside-Out Implementation & Owning-Level Verification (Build Plan Section 5)
 Include only steps touched by the Change:
 1. **Entity / Value-Object Invariants** → Pure unit tests (zero IO, zero mocks).
 2. **Use-Case Policy Narrative** → Use-case tests against lightweight in-memory/fake Ports verifying decisions, edge cases, and failure semantics.

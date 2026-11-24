@@ -36,8 +36,8 @@ When we delegate execution to coding agents, **the agent sits where plans meet r
 | The Remaining Hard Problem | How `cstack` Handles It | Skill |
 | :--- | :--- | :--- |
 | Ambiguous goals & obsolete assumptions | **Domain Ontology**: Audits your codebase first, captures proposals faithfully (`PS-*`), and runs short dependency-ordered frontier grilling with concrete examples to nail down real domain rules & terminology. | **`/cs-explore`** |
-| Scope creep & muddy product models | **Product Specification**: Defines target workflows, human/software/agent responsibilities, interactive UI continuity & state matrices (on-demand for UI work), concrete acceptance scenarios, `PS-*` Solution Coverage, and explicit `Out of Scope` guardrails before coding. | **`/cs-spec`** |
-| Compounding structural complexity | **CMP Design**: Pairs the universal CMP kernel with on-demand domain cases (**Clean Architecture** for backend, **Frontend Architecture** for interactive UI, plus **Cross-Boundary Seam** rules for full-stack tasks) right in conversation—with zero disposable design docs. | **`/cs-design`** |
+| Scope creep & muddy product models | **Product Specification**: Defines target workflows, human/software/agent responsibilities, on-demand UI cases (**Interactive UX** for usability + **Visual Design** for 0→1 aesthetics & anti-style-slop), concrete acceptance scenarios, `PS-*` Solution Coverage, and explicit `Out of Scope` guardrails before coding. | **`/cs-spec`** |
+| Compounding structural complexity | **CMP Build**: Pairs the universal CMP kernel with on-demand domain cases (**Clean Architecture** for backend, **Frontend Architecture** for interactive UI, plus **Cross-Boundary Seam** rules for full-stack tasks), gates only unresolved *What-level* decisions, and executes inside-out implementation & verification—with zero disposable design docs. | **`/cs-build`** |
 | Broken learning loop & in-branch structural drift | **Reflective Bootstrapping**: Examines friction in the live execution trace right after coding (`Missing Path`, `Boundary Bypass`, `Unowned Capability`), executes approved refactors, syncs discoveries with the human owner, and records handoff notes into the Change file without prematurely mutating trunk docs. | **`/cs-reflect`** |
 | Knowledge entropy & append-only doc rot | **Diff-Verified Knowledge Governance (Local GC)**: Statelessly reconciles the Change file against the final `git diff` at merge time to curate Living Knowledge via **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** (+ confirm-first reminders) strictly within the touched slice, routes deferred refactors, and cleans up retired Change files. | **`/cs-merge`** |
 
@@ -45,8 +45,8 @@ When we delegate execution to coding agents, **the agent sits where plans meet r
 
 ## Design Philosophy
 
-1. **Model the domain, design the product, build for modification** — Understanding business reality (`Explore`), creatively designing a better workflow (`Spec`), and structuring evolvable code (`Design`) are distinct cognitive activities. Mixing them creates muddy abstractions.
-2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary design artifacts. `cs-design` plans in conversation rather than generating disposable design docs, and prose guardrails retire once internalized into code or tests.
+1. **Model the domain, design the product, build for modification** — Understanding business reality (`Explore`), creatively designing a better workflow and experience (`Spec`), and constructing evolvable working software (`Build`) are distinct cognitive activities. Mixing them creates muddy abstractions.
+2. **Knowledge belongs where it is best expressed** — Code, types, interfaces, and tests are the primary structural artifacts. `/cs-build` plans structure in conversation rather than generating disposable design docs, and prose guardrails retire once internalized into code or tests.
 3. **Strict Delta + Merge with Local GC** — In-flight changes live in a single self-contained file (`.cstack/changes/<change-id>.md`). `/cs-reflect` captures hot execution-trace signals into the Change file right after coding; `/cs-merge` atomically curates and prunes Living Knowledge when landing, then deletes the completed Change file so dead specs never become search noise.
 4. **Human review as governance *and* knowledge synchronization** — AI handles codebase reconnaissance, structured grilling, option comparison, friction detection, and touched-slice GC proposals. Humans own unresolved *What-level* decisions—and review is where lessons from delegated practice flow back into human understanding.
 
@@ -71,8 +71,8 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 | Skill | When to Invoke | What You Get |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, legacy overhaul, or user-proposed solution | Code-grounded reconnaissance + dependency-ordered frontier grilling + concrete examples → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
-| **`/cs-spec`** | Ready to design how the product should work (or handling a small Brownfield feature directly) | Product model, role division, interactive UX & state behavior (when UI applies), `PS-*` Solution Coverage, and `Out of Scope` guardrails → Section 3 of the same Change file |
-| **`/cs-design`** | Before writing non-trivial code | Conversational Quick or Full CMP plan using on-demand domain cases (`clean-architecture`, `frontend-architecture`, or both with Cross-Boundary Seam): Modification Closure, Policy/State/Mechanism placement, unresolved *What-level* gates, and an inside-out implementation & verification route |
+| **`/cs-spec`** | Ready to design how the product should work or look (or handling a small Brownfield feature directly) | Product model, role division, on-demand `interactive-ux` / `visual-design` specs, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Section 3 of the same Change file |
+| **`/cs-build`** | Ready to architect, implement & verify non-trivial code | Conversational Quick or Full CMP plan using on-demand domain cases (`clean-architecture`, `frontend-architecture`, or both with Cross-Boundary Seam) → pauses **only** on unresolved *What-level* gates, otherwise builds & verifies inside-out directly |
 | **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | CMP friction diagnosis (`Missing Path` / `Boundary Bypass` / `Unowned Capability`) + `[R-*]` Refactor Proposals (executed in-branch once you approve, or deferred) + human sync + Section 4 (`Reflection & Merge Handoff`) written to the Change file |
 | **`/cs-merge`** | When ready to merge / land the change (works statelessly even in a fresh session) | Diff-verified Touched-Slice Local GC (`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE` + confirm-first advisories) on Living Knowledge, explicit routing for any deferred refactors, and cleanup of the completed Change file |
 
@@ -93,14 +93,14 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
    /cs-spec
    ```
    - Builds on the same Change file to define target workflows, user/software/agent responsibilities, acceptance scenarios, `Solution Coverage` (accounting for every `PS-*`), and explicit `Out of Scope` guardrails.
-   - *HTML sketches when useful*: If a layout, interaction, or state transition is hard to picture in text, the agent can draw it in a standalone HTML file during the discussion. Agreed behavior and decisions go back into the Change file.
+   - *HTML sketches & Style Tiles when useful*: If a layout, state transition, or 0→1 visual aesthetic is hard to picture in text, the agent draws a standalone HTML wireframe or native CSS-variable Style Tile during discussion. Agreed behavior, visual pillars, and decisions go back into the Change file.
 
-3. **Plan the software design (`/cs-design`)**
+3. **Build & verify for modification (`/cs-build`)**
    ```text
-   /cs-design
+   /cs-build
    ```
-   - Reads the active Change spec and your codebase, loads only the matching CMP architecture case(s) (Clean Architecture for backend, Frontend Architecture for interactive UI, or both with Cross-Boundary Seam rules for full-stack changes), checks boundary trust, and prints a **Quick** or **Full** design plan right in chat.
-   - Resolve any flagged *What-level* decision, then execute the plan inside-out (including live browser verification when UI layout or runtime behavior changes).
+   - Reads the active Change spec and your codebase, loads only the matching CMP architecture case(s) (Clean Architecture for backend, Frontend Architecture for interactive UI, or both with Cross-Boundary Seam rules for full-stack changes), and prints a concise **Quick** or **Full** CMP plan in chat.
+   - Pauses **only** if an unresolved *What-level* decision needs your judgment; otherwise proceeds directly into inside-out implementation and owning-level verification (including live browser verification when UI layout or runtime behavior changes).
 
 4. **Reflect, refactor & capture trace signals (`/cs-reflect`)**
    ```text
@@ -122,10 +122,10 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 
 You do **not** have to run all five skills every time:
 
-- **Small Brownfield feature**: `/cs-spec` (inlines a quick gap check) → `/cs-design` → implement → `/cs-reflect` → `/cs-merge`
-- **Clear bug fix or refactor**: `/cs-design` → implement → `/cs-reflect` *(keeps zero file overhead if clean; lazily writes a compact Change file for `/cs-merge` only when deferred refactors or Living Knowledge deltas exist)*
-- **Pure visual / styling polish**: Iterate directly with live browser feedback when domain rules, state ownership, and architectural boundaries stay untouched
-- **Mid-flight discovery**: Hit a product ambiguity in `/cs-design`? Jump back to `/cs-spec`. Uncover an unexpected domain rule in `/cs-spec`? Jump back to `/cs-explore`.
+- **Small Brownfield feature**: `/cs-spec` (inlines a quick gap check) → `/cs-build` → `/cs-reflect` → `/cs-merge`
+- **Clear bug fix or refactor**: `/cs-build` → `/cs-reflect` *(keeps zero file overhead if clean; lazily writes a compact Change file for `/cs-merge` only when deferred refactors or Living Knowledge deltas exist)*
+- **Tiny CSS / pixel tweaks within an existing visual system**: Iterate directly with live browser feedback when domain rules, state ownership, visual tokens, and boundaries stay untouched *(use `/cs-spec` with the `visual-design` case for 0→1 aesthetics or visual redesigns)*
+- **Mid-flight discovery**: Hit a product ambiguity in `/cs-build`? Jump back to `/cs-spec`. Uncover an unexpected domain rule in `/cs-spec`? Jump back to `/cs-explore`.
 
 ---
 
@@ -150,5 +150,5 @@ Your existing `docs/`, `GLOSSARY.md`, `DESIGN.md`, backend/frontend `architectur
 - [Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/) — The context-cost design foundation behind `cstack`
 - [Reflective Bootstrapping](https://www.airic.dev/research/reflective-bootstrapping/): How Agents Turn Practice into Institutional Knowledge — The theory behind `/cs-reflect` and human-AI knowledge synchronization
 - [`docs/prd.md`](docs/prd.md) — Full Product Requirements Document & methodology rationale
-- [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-design`, `cs-reflect`, `cs-merge`)
+- [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-build`, `cs-reflect`, `cs-merge`)
 - [`agents/cstack-explorer.md`](agents/cstack-explorer.md) & [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — Optional shared read-only explorer subagent and compaction-safe friction tracker

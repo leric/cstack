@@ -9,7 +9,7 @@ Understand the real-world problem and business domain faithfully **before** desi
 
 > **Core Stance — Model Reality, Not the Product Yet**
 > - Your job in `Explore` is to discover what is true about the problem, stakeholders, domain concepts, rules, constraints, and existing workflows.
-> - Do **not** prematurely design UI, software features, or internal code architecture here—that belongs to `/cs-spec` and `Design`.
+> - Do **not** prematurely design UI, software features, or internal code architecture here—that belongs to `/cs-spec` and `/cs-build`.
 
 ### CStack Knowledge Contract & Frontier Grilling Protocol
 
@@ -17,7 +17,7 @@ Understand the real-world problem and business domain faithfully **before** desi
 - **Routing Index (`index`)**: Always check `.cstack/index.md` first (or a custom index path referenced by the repository). The index is a thin **Context Routing Index** listing:
   1. Where **Living Knowledge** lives (user-defined structure — `docs/`, `GLOSSARY.md`, ADRs, code comments, etc. Never force a rigid directory layout on Living Knowledge).
   2. The **Changes directory** path (default: `.cstack/changes/`).
-  3. **Active Changes** and their status (`exploring` | `speccing` | `ready-for-design` | `reflected`; removed once settled by `/cs-merge`).
+  3. **Active Changes** and their status (`exploring` | `speccing` | `ready-to-build` | `reflected`; removed once settled by `/cs-merge`).
 - **Single-File Change (`<changes-dir>/<change-id>.md`)**: Store ALL in-flight exploration, product specification, and post-coding reflection clues for a single change inside **one Markdown file** (Sections 1–4).
 - **Lazy Bootstrap**: If `.cstack/index.md` does not exist yet (Greenfield or first use), create a minimal `.cstack/index.md` on first write using this skeleton—do not scaffold extra directories or empty template docs:
   ```markdown

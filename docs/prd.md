@@ -1,7 +1,7 @@
 # CStack — Product Requirements Document
 
 **Version:** 0.3  
-**Status:** Active (Explore + Spec + Design + Reflect + Merge)  
+**Status:** Active (Explore + Spec + Build + Reflect + Merge)  
 **Category:** AI Software Engineering Skills  
 **Tagline:** *Discover the domain. Design the product. Evolve the software.*
 
@@ -19,7 +19,7 @@ cstack 不试图取代 Coding Agent，也不重新实现通用的编码、测试
 
 - **Explore：** 理解问题，发现并提取现实业务领域的知识。
 - **Spec：** 根据产品目标创造性地设计软件系统的职责、工作方式与预期行为。
-- **Design：** 运用 CMP 和成熟架构原则，将产品行为转化为可执行的软件设计骨架、边界契约与修改计划。
+- **Build：** 运用 CMP 与按需加载的领域架构最佳实践 Case，在对话中完成软件结构规划、门控未决 *What-level* 决策，并直通执行由内向外的编码与验证。
 - **Reflect：** 在编码刚完成、一线轨迹尚热时诊断结构摩擦、按授权就地执行重构、同步实践新知，并将热现场信号固化进 Change 文件（不直接污染主干知识库）。
 - **Merge：** 在合入主干前后无状态核验最终代码差异，严格在触碰切片内对 Living Knowledge 执行增删改收敛（局部 GC），分流延后重构项并收口清理已完成 Change 文件。
 
@@ -141,7 +141,7 @@ Agent 应主动识别未知知识和隐性假设。
 
 ### P6. Skills are modular and iterative, not a rigid pipeline
 
-Explore、Spec、Design、Reflect 和 Merge 是具有清晰职责边界的工作模式（其中 Reflect 与 Merge 通过 Change 文件解耦会话状态），新的发现随时可以使上游阶段重新开启。
+Explore、Spec、Build、Reflect 和 Merge 是具有清晰职责边界的工作模式（其中 Reflect 与 Merge 通过 Change 文件解耦会话状态），新的发现随时可以使上游阶段重新开启。
 
 ### P7. Minimize human cognitive burden
 
@@ -189,9 +189,9 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 - **SPEC-01 Product Model Design：** 根据产品目标选择和组织领域概念，构建产品自身的概念模型；允许引入并不存在于原有业务中的产品抽象。
 - **SPEC-02 Responsibility & Workflow Design：** 设计软件、用户、Agent 和其他参与者之间的职责与协作方式，定义目标工作流程、交互行为、决策点和权限约束。
-- **SPEC-03 Behavior Specification & Out of Scope：** 明确外部可观测功能行为、业务规则、状态转换、异常情况与验收条件；当涉及交互界面时，按需加载交互体验指南（`interactive-ui-spec`）审视空间上下文连续性、乐观反馈/撤销体验、渐进式披露、全量 UI 状态矩阵与跨端接口支撑诉求，避免退化为平庸的数据库表单交互；同时明确列出 **Out of Scope（显式拒绝清单）**，防止实现阶段范围膨胀。
+- **SPEC-03 Behavior, UX & Visual Specification + Out of Scope：** 明确外部可观测功能行为、业务规则、状态转换、异常情况与验收条件；针对前端界面提供两个正交的按需加载场景——**`interactive-ux`（好不好用）** 在所有界面功能中审视空间连续性、乐观反馈/撤销体验、渐进式披露、全状态矩阵与跨端接口诉求，**`visual-design`（好不好看）** 仅在 0→1 新产品、视觉改版或品牌展示页中加载以按产品属性校准审美调性与信息密度、锁定四大视觉支柱并建立反样式 Slop 护栏（成熟存量项目日常迭代默认不加载，直接继承 `DESIGN.md` / Token）；同时明确列出 **Out of Scope（显式拒绝清单）**，防止范围膨胀。
 - **SPEC-04 Solution Coverage：** 逐条对照 Explore 阶段记录的客户原案（`PS-*`），明确每一项的处理方式（原样满足 / 替代方案达成动机 / 协商调整或取消 / 尚未解决），绝不静默丢弃重要诉求。
-- **SPEC-05 Product Decisions & HTML Sketches：** 对候选方案进行分析和比较；优先锚定项目既有组件库/设计规范，当文字难以表达布局、交互或状态转换时，用单个可直接打开的临时 HTML 草图辅助对齐，确认后将行为、决策及理由写回 Change Spec（草图样式仅作讨论辅助，不带入生产实现）。
+- **SPEC-05 Product Decisions, HTML Wireframes & Style Tiles：** 对候选方案进行分析和比较；当文字难以表达布局、交互或视觉调性时，用单个可直接打开的临时 HTML 辅助拍板（视觉定调时采用原生 CSS 变量 + 真实业务数据的 Style Tile，杜绝 Bootstrap 模板污染审美；存量交互流采用贴合既有组件语汇的轻量草图），确认后将行为、视觉支柱及理由写回 Change Spec。
 - **SPEC-06 Brownfield Fast-Path：** 对于小规模增量变更，允许直接从 `/cs-spec` 进入并内联完成轻量知识缺口检查；仅当发现深层领域冲突时建议切回 `/cs-explore`。
 
 #### 输出知识（写入当前 Change 文件 Section 3）
@@ -205,9 +205,9 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 ---
 
-### 5.3 Design — Context-Cost Driven Software Design
+### 5.3 Build — CMP-Driven Software Construction & Verification
 
-**目标：运用普适的 CMP 内核与按需加载的领域架构最佳实践 Case，将产品行为（或已批准的延后重构提案）转化为清晰的软件设计边界、状态与跨端契约及实现计划，使系统在未来持续修改过程中保持较低的 Context Cost。**
+**目标：运用普适的 CMP 内核与按需加载的领域架构最佳实践 Case，将产品行为（或已批准的延后重构提案）转化为清晰的软件结构计划，门控未决 *What-level* 分歧，并直通完成由内向外的编码实现与归属层验证，使系统在未来持续修改中保持低 Context Cost。**
 
 #### 方法论
 
@@ -219,12 +219,12 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 #### 核心能力
 
-- **DES-01 Context Cost Analysis & Case Routing：** 分析哪些行为改变、哪些保持不变，按触碰技术面按需挂载具象架构 Case（支持未来继续扩展数据流水线、Agent 系统、SDK 等领域 Case），评估 Depth/Breadth 成本与现有边界可信度。
-- **DES-02 Policy, State & Mechanism Separation：** 采用各领域原生的由内向外设计顺序（后端分离领域/用例策略与基础设施机制；前端明确单一状态宿主、分离纯计算/状态机与视图原语；全栈先锁跨端契约与领域策略）。
-- **DES-03 Context Transformation：** 权衡 Boundary Cost / Carrying Depth，平衡过早抽象（Wrong-shape Risk）与散落失联（Unindexed-closure Risk）。
-- **DES-04 Architecture as Context Routing：** 明确能力垂直归属、状态真源与水平边界，守卫依赖方向与跨端契约闭包。
-- **DES-05 Executable Design & Owning-Level Verification Planning：** 在对话中输出 Quick 或 Full 设计计划（不制造冗余设计文档），确认未决 What-level Gate 后即可由内向外编码并在归属层验证（涉及 UI 布局/样式/运行时必须包含真实浏览器核验）。
-- **DES-06 Semantic Comments & Context Indexing：** 注释仅承载语言无法直接表达的 **Semantic Contracts** 与 **Modification Closure Indexes**，严禁复述代码或为架构捷径找借口。
+- **BLD-01 Context Cost Analysis & Case Routing：** 分析哪些行为改变、哪些保持不变，按触碰技术面按需挂载具象架构 Case（支持未来继续扩展数据流水线、Agent 系统、SDK 等领域 Case），评估 Depth/Breadth 成本与现有边界可信度。
+- **BLD-02 Policy, State & Mechanism Separation：** 采用各领域原生的由内向外构造顺序（后端分离领域/用例策略与基础设施机制；前端明确单一状态宿主、分离纯计算/状态机与视图原语；全栈先锁跨端契约与领域策略）。
+- **BLD-03 Context Transformation：** 权衡 Boundary Cost / Carrying Depth，平衡过早抽象（Wrong-shape Risk）与散落失联（Unindexed-closure Risk）。
+- **BLD-04 Architecture as Context Routing：** 明确能力垂直归属、状态真源与水平边界，守卫依赖方向与跨端契约闭包。
+- **BLD-05 Gate-Driven Plan & Direct Execution：** 在对话中输出 Quick 或 Full 构造计划（不制造冗余设计文档）；存在未决 What-level 分歧时暂停请人类拍板，无门控时直接由内向外完成编码与归属层验证（涉及 UI 布局/样式/运行时必须包含真实浏览器核验）。
+- **BLD-06 Semantic Comments & Context Indexing：** 注释仅承载语言无法直接表达的 **Semantic Contracts** 与 **Modification Closure Indexes**，严禁复述代码或为架构捷径找借口。
 
 **完成标准：** 软件责任边界、核心契约与依赖约束明确表达，且引入的 Context Cost 与其为当前及未来修改带来的收益相符。
 
@@ -284,7 +284,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 1. **总体 `index` 文件（默认 `.cstack/index.md`）：** 作为整个知识库的 **Context Routing Index**，仅描述：
    - **Living Knowledge 地图：** 现有领域知识、产品行为、架构索引分别位于仓库何处（用户完全自由组织，如 `docs/`、`GLOSSARY.md`、代码注释、ADR 等）。
    - **Changes 目录位置：** 默认 `.cstack/changes/`。
-   - **Active Changes 列表：** 当前在途的 Change 文件及其状态（`exploring` | `speccing` | `ready-for-design` | `reflected`；经 `/cs-merge` 收口后从活跃列表移除）。
+   - **Active Changes 列表：** 当前在途的 Change 文件及其状态（`exploring` | `speccing` | `ready-to-build` | `reflected`；经 `/cs-merge` 收口后从活跃列表移除）。
 2. **单文件在途 Change（`<changes-dir>/<change-id>.md`）：** 一次变更从探索到合入前的全部增量契约集中在**单个 Markdown 文件**的 4 个章节中：
    - `1. Problem & Proposed Solutions` & `2. Domain Delta`（`/cs-explore`）
    - `3. Product Design & Behavior Spec`（`/cs-spec`）
@@ -299,7 +299,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 
 1. **Read Current State：** 通过 `index` 读取当前 Living Knowledge 与相关代码。
 2. **Discover & Define Delta：** 在 `changes/<change-id>.md` 第 1–3 节中持续打磨 Explore 与 Spec 增量（实现合入前绝不改动 Living Knowledge）。
-3. **Design & Implement：** 基于锁定的 Change Spec 完成软件设计与由内向外的编码验证。
+3. **Build & Verify（门控驱动构造）：** 运行 `/cs-build` 基于锁定的 Change Spec 做对话内 CMP 结构规划，解决未决 *What-level* 分歧后直通完成由内向外的编码与验证。
 4. **Reflect & Refactor（趁轨迹尚热）：** 运行 `/cs-reflect` 诊断摩擦、按授权就地重构，并将重构记录与单靠 Diff 看不见的易失线索写入第 4 节。
 5. **Merge & Local GC（合入收口）：** 运行 `/cs-merge` 映射目标文档并对照最终 Diff 在触碰切片内执行 `ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`（及确认后的提醒调整），分流未执行的延后重构项，并清理 Change 文件与已消费摩擦日志。
 
@@ -330,7 +330,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 
 - `Explore`（`cs-explore`）
 - `Spec`（`cs-spec`）
-- `Design`（`cs-design`）
+- `Build`（`cs-build`）
 - `Reflect`（`cs-reflect`）
 - `Merge`（`cs-merge`）
 
@@ -339,7 +339,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 ### 7.2 Iterative Knowledge Refinement
 
 - 当 Spec 发现领域知识不足时，可直接在同一 Change 文件内返回 Explore。
-- 当 Design 发现行为规格不明确时，可返回 Spec；当针对延后重构项启动下一轮改造时，可直接读取相应重构提案进入 Design。
+- 当 Build 发现行为规格不明确时，可返回 Spec；当针对延后重构项启动下一轮改造时，可直接读取相应重构提案进入 Build。
 - 当 Reflect 发现结构扭曲源于产品或领域模型缺陷时，可重新开启 Spec 或 Explore；对于批准在本分支解决的设计摩擦，直接在 Reflect 内完成重构验证。
 - 跨阶段反馈只修改受影响的知识与决策，保留其他已有章节，不重跑全部工作。
 
@@ -363,7 +363,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 - **用户输入：** “我们希望用户选择设备类型后，系统自动推荐适用标准，并据此生成评估任务。”
 - **Explore（写入 `changes/auto-recommend-standards.md` 第 1–2 节）：** 读取 `index` 与已有知识后完整捕获原案 `PS-1`；通过前沿审问确认“适用标准”与“实际评估范围”是两个不同概念，评估任务需专业人员结合项目确认。
 - **Spec（写入同一文件第 3 节）：** 设计“推荐候选标准并解释依据 → 用户确认评估范围 → 生成评估任务”的工作流，覆盖 `PS-1` 并列出 `Out of Scope`（无需提前规划文档修改目标）。
-- **Design：** 基于 CMP 划定 Policy/UseCase/Port 契约与由内向外的实现切片，交由 Agent 完成编码与测试。
+- **Build：** 运行 `/cs-build` 基于 CMP 划定 Policy/UseCase/Port 契约与由内向外的实现切片，无未决门控时直接完成编码与测试验证。
 - **Reflect（趁轨迹尚热，写入第 4 节）：** 发现标准适用性判断在报价与评估两处重复（`Unowned Capability`），起草 `[R-1]` 重构方案；经架构师拍板归属后在分支内直接完成抽取重构并标为 `fixed-in-branch`，同时将旧文档中已被新类型约束内化的手工同步提示记入 Section 4.3 的 `Code-Internalized Guardrails`。
 - **Merge（合入主干前后）：** 在新会话中通过 `.cstack/index.md` 定位目标文档并无状态核验最终 `git diff`，在触碰切片内将“适用标准 vs 评估范围”正式 `ADD` 入领域文档、把已被代码内化的旧防呆提示 `PRUNE` 删除，更新 `.cstack/index.md` 并删除已完成使命的 `changes/auto-recommend-standards.md`。
 
@@ -398,7 +398,7 @@ cstack 作为遵循开放 `SKILL.md` 标准的跨 Harness 软件工程 Skills �
 ### 10.3 演进里程碑
 
 - **Phase 1 — Explore + Spec：** 建立基于前沿审问、原案追踪（`PS-*`）与单文件 Change 的领域发现及行为规格机制。
-- **Phase 2 — Design：** 基于 CMP 与 Clean Architecture 建立对话内由内向外的软件设计规划。
+- **Phase 2 — Build：** 基于 CMP 与按需领域架构 Case 建立门控驱动的由内向外软件构造与验证机制。
 - **Phase 3 — Reflect：** 串联旁路摩擦采集、三类 CMP 检查、就地授权重构与人机双向认知同步。
 - **Phase 4 — Merge & Local GC（当前阶段）：** 将主干知识治理拆分为独立无状态的 `cs-merge`，通过 `ADD / RESOLVE / COMPRESS / PRUNE` + 提醒确认机制赋予 Living Knowledge 自我净化与抗熵增能力。
 
@@ -431,7 +431,7 @@ cstack 作为遵循开放 `SKILL.md` 标准的跨 Harness 软件工程 Skills �
 
 **Explore helps us understand the world.**  
 **Spec helps us design a better way to work.**  
-**Design makes that design executable and evolvable.**  
+**Build turns that product spec into evolvable software.**  
 **Reflect heals structural friction while practice is still fresh.**  
 **Merge keeps canonical knowledge lean, true, and free of decay.**
 

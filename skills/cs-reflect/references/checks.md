@@ -38,7 +38,7 @@ Creating a new registry, shared abstraction, or ownership rule is **what-level**
 
 Evidence includes:
 - A layer accessed private state, low-level details, or another layer/feature's internal type.
-- Code bypassed an existing service, port, adapter, repository, validator, policy, state machine, query-cache adapter, Design System primitive/token, or cross-end API contract.
+- Code bypassed an existing service, port, adapter, repository, validator, policy, state machine, query-cache adapter, Design System primitive/token, or cross-end API contract (including style drift on Brownfield UI: hardcoded hex colors, rogue fonts, arbitrary radii/shadows, or nested card-in-card template slop bypassing `DESIGN.md` / semantic tokens).
 - Raw backend transport DTOs penetrated deep into UI components, or backend domain/permission conditionals were duplicated in frontend JSX instead of projected across the contract.
 - Computable derived UI state or URL/server-cache truth was copied into local state and synchronized via `useEffect`.
 - Tests passed through a direct route that production code must not copy (or JSDOM unit tests were treated as visual/browser proof when CSS layout, stacking, or hydration changed).

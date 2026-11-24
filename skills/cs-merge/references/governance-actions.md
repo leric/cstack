@@ -18,7 +18,8 @@ Read **only** those files/sections. Never scan untouched Living Knowledge direct
 **When to propose**:
 - Confirmed new domain concepts, invariants, or terminology distinctions (from Section 2, reconciled with `4.3 Spec Deviations`);
 - Realized external product behaviors, role boundaries, or non-obvious edge rules (from Section 3 + final diff);
-- Durable new structural routes, Use Cases, or Ports (`4.3 Structural Routes`) in a registered Architecture Map;
+- Established Greenfield or redesigned visual direction, aesthetic guardrails, and semantic Design Token routing (into canonical `DESIGN.md` or UI docs registered in `.cstack/index.md` so subsequent Brownfield tasks inherit the visual baseline);
+- Durable new structural routes, Use Cases, Ports, or State/Cache Owners (`4.3 Structural Routes`) in a registered Architecture Map;
 - Non-obvious constraints or *Why* uncovered during execution (`4.3 Spec Deviations & Hidden Why`).
 
 **Anti-Slop Guardrails (`P1: Knowledge belongs where it is best expressed`)**:

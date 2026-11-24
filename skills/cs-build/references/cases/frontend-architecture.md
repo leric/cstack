@@ -7,7 +7,7 @@ Apply this case when designing **interactive web/client applications, SPAs, rich
 - **Strong fit**: Stateful interactive features, complex forms/editors, data-heavy dashboards, optimistic/async workflows, shared UI primitives, and client-server cache coordination.
 - **No-Dogma Guardrail**: Do **not** transplant backend Java-style `Entity -> UseCaseClass -> RepositoryInterface` ceremony onto UI components, and do **not** extract headless hooks or state machines for simple presentational leaves with trivial local state (`Wrong-shape Risk`).
 
-## 2. Coordinates & Concern Taxonomy (For Design Plan Section 3)
+## 2. Coordinates & Concern Taxonomy (For Build Plan Section 3)
 
 - **Vertical Owner**: Prefer **Feature Colocation** (`features/<capability>/` owning its view-models, hooks, queries, and feature components), reserving shared roots for domain-agnostic **Design System / UI Primitives** (`shared/ui/`, tokens) and genuinely cross-feature domain models/contracts.
 - **Horizontal Concerns & Classification Tags**:
@@ -31,9 +31,10 @@ Every piece of state must have **exactly one canonical owner** among five hosts:
    - **Strict Anti-Pattern**: Never copy URL state, Server Cache data, props, or computable Derived State into `useState` and synchronize them with `useEffect` chains.
 
 ### Four CMP Transformations Applied to UI
-- **`Reduce` (Eliminate State Soup & Duplication)**:
+- **`Reduce` (Eliminate State Soup, Style Drift & Duplication)**:
   - Replace scattered boolean flags (`isLoading`, `isError`, `isEmpty`, `isSubmitting`) with explicit discriminated-union UI states so impossible state combinations cannot exist.
   - Consolidate scattered query keys into a feature **Query Key Factory** so cache reads and invalidations share one owner.
+  - Centralize visual roles (surface elevation tiers, foreground hierarchy, primary/status accents, typography scale & `tabular-nums`, spacing/radius/motion) into semantic **CSS Custom Properties / Design Tokens** as the **Single Source of Visual Truth**—never scatter raw hex values or one-off font/shadow overrides across feature files.
 - **`Relocate` (Quarantine DTOs & Imperative DOM)**:
   - Map raw backend transport DTOs (nullable quirks, snake_case fields, error codes) at the `server-cache-adapter` boundary so JSX trees depend only on clean UI/domain models.
   - Isolate imperative third-party DOM/Canvas/editor/chart libraries behind a narrow wrapper component or hook.
@@ -53,7 +54,7 @@ Rate a boundary `untrusted` or `verify` when you spot:
 - **Effect-driven state sync**: `useEffect` watching state/props purely to `setState` elsewhere (high risk of stale renders, loops, and hidden coupling).
 - **DTO penetration**: Deep presentational components importing raw backend API response types or duplicating backend permission conditionals.
 - **Boolean-prop explosion (`God Component`)**: Shared UI component branching on 5+ boolean flags for different product screens instead of exposing composable slots or distinct variants.
-- **Design System & stacking bypass**: Ad-hoc hex colors, raw unaccessible `<div onClick>` controls bypassing existing primitives, magic `z-index: 9999` escalations, or parent `overflow: hidden` / `transform` silently breaking sticky/fixed children.
+- **Design System, Token & stacking bypass**: Ad-hoc hex colors, rogue font imports, nested bordered card-in-card clutter, raw unaccessible `<div onClick>` controls bypassing existing primitives, magic `z-index: 9999` escalations, or parent `overflow: hidden` / `transform` silently breaking sticky/fixed children.
 - **Client-only security illusion**: Treating hidden/disabled UI buttons or client route guards as authorization without server-side enforcement.
 
 ## 5. Authority Boundary (`What-level` vs. `How-level`)
@@ -71,11 +72,11 @@ Rate a boundary `untrusted` or `verify` when you spot:
 
 ## 6. Inside-Out Execution, Verification & Architecture Map Schema
 
-### Inside-Out Implementation & Owning-Level Verification (Plan Section 5)
+### Inside-Out Implementation & Owning-Level Verification (Build Plan Section 5)
 Include only steps touched by the Change:
 1. **Pure ViewModel, Schemas & State Transitions** → Fast, DOM-free unit tests covering calculations, validation, and state-machine edge cases.
 2. **Server-Cache Adapter & Headless Hooks** → Implement DTO mappers, Query Key factories, mutation invalidation / optimistic rollback closures, and URL/store bindings; verify with hook/contract tests.
-3. **UI Primitives & Feature Composition** → Assemble views using Design System primitives & tokens, implementing the full UI State Matrix (empty, loading/skeleton, optimistic, inline/partial error, text/viewport overflow, keyboard/focus flow).
+3. **Design Tokens, UI Primitives & Feature Composition** → On 0→1 or visual redesigns, lock semantic Design Tokens & foundational primitives first; on Brownfield features, compose strictly from existing tokens/primitives, implementing the full UI State Matrix (empty, loading/skeleton, optimistic, inline/partial error, overflow, keyboard/focus, `tabular-nums` alignment).
 4. **Owning-Level UI & Live Browser Verification**:
    - Component/interaction tests for behavioral & a11y contracts (roles, labels, keyboard navigation).
    - **Mandatory Live Browser Verification** (Playwright / browser subagent / Chrome DevTools) whenever layout, CSS styling/tokens, stacking context (`z-index`/modals/popovers), scroll/responsive breakpoints, URL navigation, or SSR hydration is touched—**never treat JSDOM/unit tests alone as proof that visual layout and real browser runtime work**.

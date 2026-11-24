@@ -34,8 +34,8 @@
 | 软件开发的核心难题 | `cstack` 的应对方式 | Skill |
 | :--- | :--- | :--- |
 | 需求模糊与过时假设 | **Domain Ontology（领域本体建模）**：先查代码库再发问，忠实捕获原案（`PS-*`），按依赖顺序做短轮次前沿追问与具体实例验证，把真实业务规则与术语边界钉死。 | **`/cs-explore`** |
-| 范围蔓延与产品模型混乱 | **Product Specification（产品行为规格）**：在写代码前明确目标工作流、人/软件/Agent 职责边界、交互体验与 UI 全状态矩阵（前端场景按需加载）、具体验收场景、原案覆盖表（`Solution Coverage`）与显式 `Out of Scope` 拒绝清单。 | **`/cs-spec`** |
-| 结构复杂度不断复利 | **CMP Design（上下文成本驱动设计）**：以普适 CMP 内核搭配按需加载的领域架构 Case（后端 **Clean Architecture**、前端 **Frontend Architecture**，以及全栈任务的 **Cross-Boundary Seam** 跨端接缝规则），直接在对话中做由内向外规划，不制造用完即废的设计文档。 | **`/cs-design`** |
+| 范围蔓延与产品模型混乱 | **Product Specification（产品行为规格）**：在写代码前明确目标工作流、人/软件/Agent 职责边界、按需加载的界面双场景（**`interactive-ux` 好不好用** + **`visual-design` 好不好看/反样式 Slop**）、具体验收场景、原案覆盖表（`Solution Coverage`）与显式 `Out of Scope` 拒绝清单。 | **`/cs-spec`** |
+| 结构复杂度不断复利 | **CMP Build（上下文成本驱动构造）**：以普适 CMP 内核搭配按需加载的领域架构 Case（后端 **Clean Architecture**、前端 **Frontend Architecture**，以及全栈任务的 **Cross-Boundary Seam** 跨端接缝规则），仅在存在未决 *What-level* 分歧时门控暂停，其余情况直接在对话内规划并完成由内向外的编码与验证。 | **`/cs-build`** |
 | 知识闭环断裂与分支内架构漂移 | **Reflective Bootstrapping（热轨迹诊断与重构）**：任务刚结束趁执行轨迹尚热，检测架构摩擦（`Missing Path`、`Boundary Bypass`、`Unowned Capability`），起草并在授权后就地执行重构方案，完成人机双向认知同步，并将热现场线索写入 Change 文件第 4 节（不提前污染主干文档）。 | **`/cs-reflect`** |
 | 知识库只增不减与文档腐化 | **Diff-Verified Knowledge Governance（局部 GC 与收口）**：合入主干前后无状态运行，对照最终 `git diff` 严格在本次触碰切片内执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`**（外加需确认的 `REMIND` 提醒），分流延后重构项并清理使命完成的 Change 文件。 | **`/cs-merge`** |
 
@@ -43,8 +43,8 @@
 
 ## 核心设计哲学
 
-1. **理解现实、设计产品、构造软件各司其职** —— 忠实建模业务现状（`Explore`）、创造性设计新工作方式（`Spec`）与规划可持续演进的代码结构（`Design`）是三种不同的认知活动，混为一谈只会产生浑浊的抽象。
-2. **知识保存在最适合表达它的载体中** —— 代码、类型、接口、测试以及语义注释是软件设计的第一载体。`cs-design` 在对话中做决策导向的规划，不制造用完即废的设计文档；一旦某条自然语言防呆提示已被重构内化进代码或测试，就应在知识库中及时剪枝退场。
+1. **理解现实、设计产品、构造软件各司其职** —— 忠实建模业务现状（`Explore`）、创造性设计新工作方式与体验（`Spec`）与构造可持续演进的软件（`Build`）是三种不同的认知活动，混为一谈只会产生浑浊的抽象。
+2. **知识保存在最适合表达它的载体中** —— 代码、类型、接口、测试以及语义注释是软件结构的第一载体。`/cs-build` 在对话中做决策导向的结构规划并直通开发，不制造用完即废的设计文档；一旦某条自然语言防呆提示已被重构内化进代码或测试，就应在知识库中及时剪枝退场。
 3. **严格 Delta + Merge 与局部垃圾回收（Local GC）** —— 进行中的变更集中在单个自包含文件 `.cstack/changes/<change-id>.md`；`/cs-reflect` 趁轨迹还热固化重构方案与知识信号，`/cs-merge` 在合入时原子化地治理主干 Living Knowledge 并默认删除已完成的 Change 文件，防止历史文档堆积成新的搜索噪音。
 4. **人类审阅既是治理，也是双向认知同步** —— AI 负责代码库侦察、结构化追问、方案对比、摩擦捕捉与局部 GC 提案；人类掌握未决的 *What-level* 决策权，并通过审阅把外包执行中产生的实践认知真正收回到自己脑中。
 
@@ -69,8 +69,8 @@ npx skills add leric/cstack
 | Skill | 什么时候用 | 产出什么 |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | 需求模糊、进入陌生业务领域、存量系统重构，或用户直接丢来一个解决方案时 | 代码查证 + 按依赖顺序的前沿追问 + 具体实例验证 → 实时写入 `.cstack/changes/<change-id>.md` 第 1–2 节（问题、原案 `PS-*`、领域增量） |
-| **`/cs-spec`** | 准备设计产品工作方式（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、交互连续性与 UI 状态矩阵（涉及界面时按需启用）、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节 |
-| **`/cs-design`** | 准备动手写非平凡代码之前 | 在对话中输出 Quick 或 Full 级别的 CMP 设计计划（按需加载 `clean-architecture`、`frontend-architecture` 或双端全栈接缝规则）：Modification Closure、Policy/状态归属/Mechanism 定位、未决 *What-level* 门控、由内向外的实现与验证路线 |
+| **`/cs-spec`** | 准备设计产品工作方式与视觉基调（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、按需加载的 `interactive-ux` / `visual-design` 规格、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节 |
+| **`/cs-build`** | 准备开展非平凡软件构造与验证 | 在对话中输出 Quick 或 Full 级 CMP 计划（按需加载 `clean-architecture`、`frontend-architecture` 或双端全栈接缝规则）→ 仅在存在未决 *What-level* 分歧时暂停等拍板，无门控则直接由内向外编码并验证 |
 | **`/cs-reflect`** | 完成一次非平凡开发后立刻运行（趁一线执行轨迹还在上下文中） | 检测 `Missing Path` / `Boundary Bypass` / `Unowned Capability` 并给出 `[R-*]` 重构方案，经你授权就地执行重构（或标为 `defer-to-followup` 防止 PR 蔓延），同步实践新知并将易失的热轨迹线索写入 Change 文件第 4 节 |
 | **`/cs-merge`** | 准备合入或刚合入主干时（支持换用全新 Agent 会话无状态调用） | 对照最终 `git diff`，在触碰切片内对 Living Knowledge 执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** 局部 GC（非失效的冗余路由先提 `REMIND` 提醒确认），分流延后重构项，更新 `index.md` 并默认删除已完成的 Change 文件 |
 
@@ -90,14 +90,14 @@ npx skills add leric/cstack
    /cs-spec
    ```
    - 在同一个 Change 文件里定义目标工作流、用户/软件/Agent 职责边界、验收场景、逐条对照原案的 `Solution Coverage` 以及明确的 `Out of Scope`。
-   - *按需画 HTML 草图*：布局、交互或状态变化用文字讲不清时，Agent 可以在讨论中画一个可直接打开的 HTML 草图。讨论确认的行为和决策写回 Change 文件。
+   - *按需画 HTML 草图与风格样片（Style Tile）*：布局、状态流转或 0→1 视觉调性用文字讲不清时，Agent 可以在讨论中直接生成原生 CSS 变量的 HTML 风格样片或交互草图辅助拍板，确认的行为、视觉支柱与决策写回 Change 文件。
 
-3. **规划软件设计并执行（`/cs-design`）**
+3. **基于 CMP 构造与验证软件（`/cs-build`）**
    ```text
-   /cs-design
+   /cs-build
    ```
-   - 读取活跃 Change 规格与代码库，按需加载匹配的 CMP 架构 Case（后端 Clean Architecture、前端交互架构，或全栈变更同时加载双 Case + 跨端接缝规则），检查边界可信度，并在对话中直接打印 **Quick** 或 **Full** 设计计划。
-   - 拍板其中标出的未决 *What-level* 决策后，直接交代你的 Coding Agent 按计划由内向外编码验证（涉及界面布局或运行时行为时包含真实浏览器核验）。
+   - 读取活跃 Change 规格与代码库，按需加载匹配的 CMP 架构 Case（后端 Clean Architecture、前端交互架构，或全栈变更同时加载双 Case + 跨端接缝规则），在对话中打印精炼的 **Quick** 或 **Full** 构造计划。
+   - 仅当存在未决 *What-level* 决策时停下请你拍板；若边界清晰无门控，则直接按由内向外顺序完成编码与归属层验证（涉及界面布局或运行时行为时包含真实浏览器核验）。
 
 4. **反思、就地重构与热轨迹埋点（`/cs-reflect`）**
    ```text
@@ -120,10 +120,10 @@ npx skills add leric/cstack
 
 不需要每次都跑完五个命令：
 
-- **小型增量需求（Brownfield）**：`/cs-spec`（自动内联轻量知识缺口检查）→ `/cs-design` → 实现 → `/cs-reflect` → `/cs-merge`
-- **明确的 Bug 修复 / 重构**：`/cs-design` → 实现 → `/cs-reflect`（若无延后重构与知识库变更则保持零文件开销；仅当存在待沉淀信号时才懒创建精简 Change 文件供 `/cs-merge` 收口）
-- **纯视觉 / 样式细节调优**：不涉及领域规则、状态归属和架构边界变动时，直接结合真实浏览器预览迭代即可
-- **随时回流**：`/cs-design` 发现产品行为含糊就回到 `/cs-spec`；`/cs-spec` 撞见未知业务规则就回到 `/cs-explore`。
+- **小型增量需求（Brownfield）**：`/cs-spec`（自动内联轻量知识缺口检查）→ `/cs-build` → `/cs-reflect` → `/cs-merge`
+- **明确的 Bug 修复 / 重构**：`/cs-build` → `/cs-reflect`（若无延后重构与知识库变更则保持零文件开销；仅当存在待沉淀信号时才懒创建精简 Change 文件供 `/cs-merge` 收口）
+- **既有设计体系内的像素级样式微调**：不改变领域规则、状态归属、Design Token 与架构边界时，直接结合真实浏览器预览微调即可*（若为 0→1 确立视觉风格或做界面改版，则运行 `/cs-spec` 加载 `visual-design` 场景）*
+- **随时回流**：`/cs-build` 发现产品行为含糊就回到 `/cs-spec`；`/cs-spec` 撞见未知业务规则就回到 `/cs-explore`。
 
 ---
 
@@ -148,5 +148,5 @@ npx skills add leric/cstack
 - [Context Minimization Principle (CMP)](https://www.contextcost.dev/cmp/) — `cstack` 背后的上下文成本软件设计理论
 - [Reflective Bootstrapping: How Agents Turn Practice into Institutional Knowledge](https://www.airic.dev/research/reflective-bootstrapping/) — `/cs-reflect` 与人机双向知识同步背后的理论基础
 - [`docs/prd.md`](docs/prd.md) — 完整产品需求文档与方法论阐述
-- [`skills/`](skills/) — 五个核心 Skill 源码（`cs-explore`、`cs-spec`、`cs-design`、`cs-reflect`、`cs-merge`）
+- [`skills/`](skills/) — 五个核心 Skill 源码（`cs-explore`、`cs-spec`、`cs-build`、`cs-reflect`、`cs-merge`）
 - [`agents/cstack-explorer.md`](agents/cstack-explorer.md) 与 [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — 可选共享原语（只读上下文探索子 Agent 与防压缩旁路摩擦采集规则）

@@ -1,6 +1,6 @@
-# Full Design Plan Template
+# Full Build Plan Template
 
-Print this plan in conversation as a decision-focused alignment tool (do not write a separate design doc). Omit empty rows and sections that add no information.
+Print this plan in conversation as a decision-focused alignment and execution guide (do not write a separate design doc). Omit empty rows and sections that add no information.
 
 ## 1. Intent, Spec Anchor & Active CMP Case(s)
 
@@ -10,7 +10,7 @@ Print this plan in conversation as a decision-focused alignment tool (do not wri
 - Behavior to preserve:
 - Out of Scope guardrails:
 - Success criteria:
-- Settled product or design decisions:
+- Settled product or architectural decisions:
 - Genuine ambiguities *(flag product or UX state ambiguities to resolve via `/cs-spec`)*:
 
 ## 2. Context Route & Modification Closure
@@ -35,7 +35,7 @@ Print this plan in conversation as a decision-focused alignment tool (do not wri
 - **Classification**: Use the concrete concern tags from the loaded CMP Case(s) (e.g., `entity-invariant`, `use-case-policy`, `port-contract`, `adapter-mechanism`, `delivery-mechanism`, `persistence-mechanism` for Clean Architecture; `viewmodel-domain-policy`, `interaction-state-machine`, `state-ownership-boundary`, `server-cache-adapter`, `ui-primitive-mechanism`, `route-feature-composition` for Frontend Architecture; plus `cross-end-seam`, `ownership-needed`, or `placement-review` when applicable).
 - **CMP moves**: `Reduce`, `Relocate`, `Index`, `Check` (note Wrong-shape vs. Unindexed-closure trade-offs if non-obvious).
 
-## 4. Boundaries, Cross-End Seam & Human Decisions
+## 4. Boundaries, Cross-End Seam & Human Gates
 
 | Boundary, state host, or seam | Trust | Existing contract or owner | Planned action | Authority |
 |---|---|---|---|---|
@@ -43,26 +43,23 @@ Print this plan in conversation as a decision-focused alignment tool (do not wri
 
 *(When spanning Backend + Frontend, include a row for the **Cross-Boundary Seam**: canonical contract source, server policy authority vs. UI affordance projection, and UX-driven read/write/error semantics.)*
 
-Unresolved human design gates only:
+Unresolved human gates only:
 
 - Decision:
 - Options and CMP trade-offs:
 - Safe How-level work that can continue independently:
 
-Write `None` when no unresolved gate exists.
+Write `None — proceeding directly to inside-out build` when no unresolved gate exists.
 
-## 5. Inside-Out Implementation, Contracts & Verification
+## 5. Inside-Out Execution & Owning-Level Verification
 
 Follow the inside-out sequence of the active CMP Case(s), pairing every step with verification at its owning level (include only applicable steps):
 
-- **Single-domain change**: Core invariants / pure ViewModel & state transitions → Use-case policy / headless & cache contracts → Client-authored Ports / DTO boundaries → Adapters, UI primitives, delivery/composition & wiring.
-- **Full-stack change (`clean-architecture + frontend-architecture`)**: Lock core domain policy + Cross-Boundary Contract first → execute Backend inside-out and Frontend inside-out against that locked contract → close with wired end-to-end & live-browser verification.
+- **Single-domain change**: Core invariants / pure ViewModel & state transitions → Use-case policy / headless & cache contracts → Client-authored Ports / DTO & Token boundaries → Adapters, UI primitives, delivery/composition & wiring.
+- **Full-stack change (`clean-architecture + frontend-architecture`)**: Lock core domain policy + Cross-Boundary Contract first → build Backend inside-out and Frontend inside-out against that locked contract → close with wired end-to-end & live-browser verification.
 
-- Concrete implementation steps:
-- Tests, static checks & browser verification (by owning level; require live browser check whenever UI layout, CSS stacking, routing, or hydration changes):
+- Concrete build steps:
+- Tests, static checks & browser verification (by owning level; require live browser check whenever UI layout, CSS styling/stacking, routing, or hydration changes):
 - Semantic contracts / closure indexes to encode in comments *(if any)*:
-- Manual review focus on policy, UX state, or contract decisions:
 - Later Architecture Map impact *(settled via `/cs-merge`; only if an approved structural route changes)*:
-- Agent may implement now:
-- Agent must not decide without approval:
-- Next step: `proceed` / `resolve gate` / `return to /cs-spec` / `inspect more context`
+- Execution status: `building now (no unresolved gates)` / `paused at unresolved What-level gate` / `return to /cs-spec` / `inspect more context`
