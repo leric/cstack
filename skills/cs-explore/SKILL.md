@@ -54,7 +54,7 @@ Understand the real-world problem and business domain faithfully **before** desi
 2. Read relevant **Living Knowledge** referenced by `index` (domain terms, existing behaviors, architecture pointers).
 3. If exploring inside an existing codebase, dispatch `cstack-explorer` (or targeted read-only searches) to gather facts already answerable from code and docs so you never waste user time on codebase-answerable questions.
 4. Determine the active change file:
-   - If resuming an existing change, open `<changes-dir>/<change-id>.md`.
+   - If resuming an existing change, open `<changes-dir>/<change-id>.md` (or `<changes-dir>/<topic-id>/overview.md` if re-entering a multi-slice topic).
    - Otherwise, choose a concise kebab-case `<change-id>`, create `<changes-dir>/<change-id>.md` with `Status: exploring`, and register it under `Active Changes` in `index`.
 
 ### Step 2: Capture Input & Respect Proposed Solutions
@@ -65,6 +65,7 @@ When the user presents a problem, request, or ready-made solution:
    - Instead, treat their proposal as a high-signal clue: probe concrete scenarios, edge cases, exceptions, and failure modes of the proposal to uncover the underlying domain rules.
 2. **Detect Knowledge Gaps & Conflicts**:
    - Check incoming concepts against existing Living Knowledge for synonym drift, contradictory definitions, hidden constraints, missing stakeholders, or unstated assumptions.
+   - *Multi-problem escape hatch*: Only if the discussion clearly spans **multiple loosely-coupled problem areas**, suggest focusing this session on one sub-domain and park the remaining problems under `Deferred Topics` (`DT-*`) in Section 1 (noting any associated `PS-*`) so `/cs-merge` can surface them for a future `/cs-explore`—still writing one Change file, and leaving vertical delivery slicing of a cohesive domain to `/cs-spec`.
 
 ### Step 3: Frontier Grilling & Example-Driven Refinement
 Work the unresolved knowledge/decision tree in structured rounds:
@@ -106,6 +107,8 @@ Write and maintain Sections 1 and 2 inside `<changes-dir>/<change-id>.md` (prese
 - **Proposed Solutions (Captured)**:
   - **PS-1**: <Faithful description of proposed solution> — *Underlying motivation*: <Why it was proposed>
   - **PS-2**: <...>
+- **Deferred Topics (Parked for Future Explore)** *(omit if none)*:
+  - **DT-1**: <Concise summary of parked sub-problem> — *Why parked*: <Out of current focus / loosely coupled> — *Associated proposals*: `PS-*` *(or `None`)*
 
 ## 2. Domain Delta
 ### Concepts & Relationships

@@ -5,9 +5,9 @@
 ## Strict Scope: Touched Knowledge Slice Only
 
 Determine the Touched Knowledge Slice from:
-1. Header `Related Living Knowledge` of `<changes-dir>/<change-id>.md`;
+1. Header `Related Living Knowledge` of the active Change file (`<changes-dir>/<change-id>.md`, or slice file plus `overview.md` for a multi-slice topic);
 2. `Section 4.2 (Touched Knowledge Slice)` and `Section 4.3 (Trace Clues)` recorded by `/cs-reflect`;
-3. Registered `.cstack/index.md` entries that cover the domain concepts (Section 2), product behaviors (Section 3), or architectural modules touched by the final `git diff`.
+3. Registered `.cstack/index.md` entries that cover the realized domain concepts (Section 2, or the realized subset of `overview.md`), product behaviors (Section 3), or architectural modules touched by the final `git diff`.
 
 Read **only** those files/sections. Never scan untouched Living Knowledge directories during `/cs-merge`—frequently modified areas stay clean continuously, while cold areas cost zero review attention.
 

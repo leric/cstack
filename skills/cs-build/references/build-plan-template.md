@@ -4,7 +4,7 @@ Print this plan in conversation as a decision-focused alignment and execution gu
 
 ## 1. Intent, Spec Anchor & Active CMP Case(s)
 
-- Active Change / Spec: *(e.g. `.cstack/changes/<change-id>.md` or "Direct request")*
+- Active Change / Spec: *(e.g. `.cstack/changes/<change-id>.md`, `.cstack/changes/<topic-id>/01-<slice>.md` + `overview.md`, or "Direct request")*
 - Active CMP Case(s): *(`clean-architecture` | `frontend-architecture` | `clean-architecture + frontend-architecture (full-stack)` | `direct-cmp (lightweight)`)*
 - Intended behavior change:
 - Behavior to preserve:

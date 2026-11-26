@@ -69,10 +69,10 @@ npx skills add leric/cstack
 | Skill | 什么时候用 | 产出什么 |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | 需求模糊、进入陌生业务领域、存量系统重构，或用户直接丢来一个解决方案时 | 代码查证 + 按依赖顺序的前沿追问 + 具体实例验证 → 实时写入 `.cstack/changes/<change-id>.md` 第 1–2 节（问题、原案 `PS-*`、领域增量） |
-| **`/cs-spec`** | 准备设计产品工作方式与视觉基调（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、按需加载的 `interactive-ux` / `visual-design` 规格、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节 |
+| **`/cs-spec`** | 准备设计产品工作方式与视觉基调（或直接处理小型 Brownfield 增量需求） | 产品模型、角色职责分工、按需加载的 `interactive-ux` / `visual-design` 规格、`PS-*` 覆盖表（`Solution Coverage`）与 `Out of Scope` 护栏 → 写入同一 Change 文件第 3 节*（大方案按需升级为多切片目录）* |
 | **`/cs-build`** | 准备开展非平凡软件构造与验证 | 在对话中输出 Quick 或 Full 级 CMP 计划（按需加载 `clean-architecture`、`frontend-architecture` 或双端全栈接缝规则）→ 仅在存在未决 *What-level* 分歧时暂停等拍板，无门控则直接由内向外编码并验证 |
 | **`/cs-reflect`** | 完成一次非平凡开发后立刻运行（趁一线执行轨迹还在上下文中） | 检测 `Missing Path` / `Boundary Bypass` / `Unowned Capability` 并给出 `[R-*]` 重构方案，经你授权就地执行重构（或标为 `defer-to-followup` 防止 PR 蔓延），同步实践新知并将易失的热轨迹线索写入 Change 文件第 4 节 |
-| **`/cs-merge`** | 准备合入或刚合入主干时（支持换用全新 Agent 会话无状态调用） | 对照最终 `git diff`，在触碰切片内对 Living Knowledge 执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** 局部 GC（非失效的冗余路由先提 `REMIND` 提醒确认），分流延后重构项，更新 `index.md` 并默认删除已完成的 Change 文件 |
+| **`/cs-merge`** | 准备合入或刚合入主干时（支持换用全新 Agent 会话无状态调用） | 对照最终 `git diff`，在触碰切片内对 Living Knowledge 执行 **`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE`** 局部 GC（非失效的冗余路由先提 `REMIND` 提醒确认），分流延后重构/暂存议题，更新 `index.md` 并清理已完成 Change 产物 |
 
 ---
 
@@ -135,7 +135,10 @@ npx skills add leric/cstack
 .cstack/
 ├── index.md                    # 登记你现有的 Living Knowledge 路径（结构不限）与活跃变更
 ├── changes/
-│   └── <change-id>.md          # 单文件承载在途 Explore + Spec + Reflection Handoff（/cs-merge 收口后默认删除）
+│   ├── <change-id>.md          # 默认：单文件承载在途 Explore + Spec + Reflection（/cs-merge 后默认删除）
+│   └── <topic-id>/             # 可选（仅当 /cs-spec 发现方案过大时按需升级）
+│       ├── overview.md         #   共享第 1–2 节、PS-*/DT-* 总账与薄 Slice Map
+│       └── 01-<slice-id>.md    #   按需展开的当前切片 Spec + 第 4 节（合入后即删）
 └── friction.log                # 可选旁路摩擦日志（由 /cs-reflect 提炼消费，在收口时清理）
 ```
 
@@ -149,4 +152,3 @@ npx skills add leric/cstack
 - [Reflective Bootstrapping: How Agents Turn Practice into Institutional Knowledge](https://www.airic.dev/research/reflective-bootstrapping/) — `/cs-reflect` 与人机双向知识同步背后的理论基础
 - [`docs/prd.md`](docs/prd.md) — 完整产品需求文档与方法论阐述
 - [`skills/`](skills/) — 五个核心 Skill 源码（`cs-explore`、`cs-spec`、`cs-build`、`cs-reflect`、`cs-merge`）
-- [`agents/cstack-explorer.md`](agents/cstack-explorer.md) 与 [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — 可选共享原语（只读上下文探索子 Agent 与防压缩旁路摩擦采集规则）

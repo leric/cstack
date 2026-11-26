@@ -58,7 +58,7 @@ When loading both backend and frontend cases in a single task, treat the **Backe
 
 ## Authority Boundary
 
-Treat a human gate strictly as an **unresolved What-level decision**, not merely the presence of a new file or symbol. Consider a decision **already resolved** when the user request, an approved Change Spec (`changes/<change-id>.md`), an existing architectural rule, or an established owner clearly supplies it.
+Treat a human gate strictly as an **unresolved What-level decision**, not merely the presence of a new file or symbol. Consider a decision **already resolved** when the user request, an approved Change Spec (`changes/<change-id>.md` or `<topic-id>/<NN>-<slice-id>.md`), an existing architectural rule, or an established owner clearly supplies it.
 
 - **How-level**: Work within an authorized behavior, owner, boundary, contract, state host, token system, or placement rule (see active Case for domain-specific examples).
 - **What-level**: Decide product behavior, capability/use-case boundaries, state ownership host (URL vs. cache vs. store vs. local), port or cross-end contract semantics, shared Design System primitives/tokens, cross-module policy placement, dependency direction, or Greenfield structural topology.
@@ -72,7 +72,7 @@ Treat a human gate strictly as an **unresolved What-level decision**, not merely
 
 ### Phase 1: CMP Context & Structural Plan
 1. **Load cstack Knowledge & Clarify Intent**:
-   - Check `.cstack/index.md` (when present) to locate Living Knowledge (Architecture Maps, Cross-End Contracts, `DESIGN.md` / Design Tokens) and the active Change file (`<changes-dir>/<change-id>.md`—including any deferred `[R-*]` Refactor Proposal from Section 4.1).
+   - Check `.cstack/index.md` (when present) to locate Living Knowledge (Architecture Maps, Cross-End Contracts, `DESIGN.md` / Design Tokens) and the active Change file (`<changes-dir>/<change-id>.md`—including any deferred `[R-*]` Refactor Proposal from Section 4.1—or, for a multi-slice topic, the active slice `<changes-dir>/<topic-id>/<NN>-<slice-id>.md` plus its `Parent Overview` `overview.md` for shared domain invariants and slice boundaries).
    - State the intended behavior change, behavior to preserve, `Out of Scope` guardrails, settled decisions, and genuine ambiguities.
    - **Spec Feedback Loop**: If unresolved product behavior, UX state semantics, or domain policy ambiguity blocks construction, flag it explicitly and recommend resolving it via `/cs-spec` (or gate it as an unresolved What-level decision).
 2. **Start from the Natural Entry Point & Select CMP Case(s)**:

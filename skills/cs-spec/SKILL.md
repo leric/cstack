@@ -18,7 +18,7 @@ Design how the target working system *should* operate based on domain reality an
   1. Where **Living Knowledge** lives (user-defined structure — `docs/`, `GLOSSARY.md`, ADRs, code comments, etc. Never force a rigid directory layout on Living Knowledge).
   2. The **Changes directory** path (default: `.cstack/changes/`).
   3. **Active Changes** and their status (`exploring` | `speccing` | `ready-to-build` | `reflected`; removed once settled by `/cs-merge`).
-- **Single-File Change (`<changes-dir>/<change-id>.md`)**: Store ALL in-flight exploration, product specification, and post-coding reflection clues for a single change inside **one Markdown file** (Sections 1–4).
+- **Single-File Change (`<changes-dir>/<change-id>.md`)**: Store ALL in-flight exploration, product specification, and post-coding reflection clues for a single change inside **one Markdown file** (Sections 1–4). *(Only when a designed solution is too large for one `/cs-build`, upgrade on demand per [`references/multi-slice.md`](references/multi-slice.md).)*
 - **Lazy Bootstrap**: If `.cstack/index.md` does not exist yet (Greenfield or first use), create a minimal `.cstack/index.md` on first write using this skeleton—do not scaffold extra directories or empty template docs:
   ```markdown
   # Knowledge Index
@@ -51,7 +51,7 @@ Design how the target working system *should* operate based on domain reality an
 
 ### Step 1: Load Context & Brownfield Fast-Path Check
 1. Read `.cstack/index.md` (or the repository's registered knowledge index) and relevant **Living Knowledge**.
-2. Open the active Change file `<changes-dir>/<change-id>.md` if one already exists from `/cs-explore`.
+2. Open the active Change file `<changes-dir>/<change-id>.md` if one already exists from `/cs-explore` *(if resuming a multi-slice `<changes-dir>/<topic-id>/overview.md` for its next queued slice, read [`references/multi-slice.md`](references/multi-slice.md))*.
 3. **Brownfield Fast-Path (Direct Spec Invocation)**:
    - If invoked directly without a prior `Explore` session on a **small, well-understood incremental change**: inspect Living Knowledge and the codebase (using `cstack-explorer` for broad lookups), create `<changes-dir>/<change-id>.md`, register it in `index`, and fill in concise Sections 1 and 2 (including any user-proposed `PS-*`) inline.
    - If you uncover unfamiliar domain rules, major terminology conflicts, or deep hidden constraints: **pause and recommend switching to `/cs-explore`** before locking product behavior.
@@ -66,6 +66,7 @@ Work the unresolved product design choices in structured **Design Tree + Frontie
 1. **Product Model & Responsibilities**:
    - Propose how domain concepts should be shaped into product abstractions and how responsibilities divide across **Users**, **Software** (including Client UX vs. Server Authority when full-stack), **AI Agents**, and **External Systems**.
    - Define target workflows, decision points, handoffs, and authority/permission rules (plus usability mechanics when `interactive-ux.md` applies, and visual tone/token pillars when `visual-design.md` applies).
+   - *Oversized-solution escape hatch*: Only if the designed solution is clearly too large for a single `/cs-build`, read [`references/multi-slice.md`](references/multi-slice.md) to propose upgrading into a `<topic-id>/` directory (`overview.md` + just-in-time active slice).
 2. **Compare Candidates & Surface Trade-offs**:
    - Explicitly distinguish **Confirmed Domain Facts** (from Section 2), **Product Design Choices**, and **Unvalidated Product Hypotheses**.
    - When a candidate product design deviates from a user's original `PS-*`, explain the trade-off transparently rather than silently overwriting it.
@@ -84,14 +85,15 @@ Before closing `Spec`, ensure Section 3 of `<changes-dir>/<change-id>.md` comple
    - When `interactive-ux.md` applies, cover non-happy-path UI states (empty, loading/optimistic, partial failure, overflow, URL/refresh/Back behavior) and UX-driven cross-end expectations; when `visual-design.md` applies, record the approved visual pillars/token semantics and explicit visual anti-slop guardrails.
    - Focus strictly on **externally observable behavior and visual/interaction contracts** so downstream design and verification test real product intent rather than internal implementation details.
 2. **Mandatory Solution Coverage (`PS-*`)**:
-   - Account for **every** `PS-*` recorded in Section 1 using one of four dispositions:
+   - Account for **every** `PS-*` recorded in Section 1 (or, for a multi-slice Change, every `PS-*` assigned to this slice in `overview.md`, referencing `overview.md` for proposals assigned to later slices or parked `DT-*`) using one of five dispositions:
      - `Fulfilled as proposed`
      - `Met via alternative` *(explain how it achieves the underlying motivation)*
      - `Adjusted / Dropped (agreed)` *(record agreed rationale)*
+     - `Deferred (Slice N / DT-*)` *(explicitly assigned to a queued slice in `overview.md` or parked under an Explore Deferred Topic `DT-*`)*
      - `Unresolved` *(must be settled or explicitly deferred before `/cs-build`)*
    - **Never silently drop an important customer/user proposal.**
 3. **Explicit `Out of Scope` Refusal List**:
-   - Explicitly list excluded capabilities, edge cases, and non-goals—this is the primary guardrail against scope creep during `/cs-build`.
+   - Explicitly list excluded capabilities, edge cases, non-goals, and (for multi-slice Changes) capabilities deferred to later slices in `overview.md`—this is the primary guardrail against scope creep during `/cs-build`.
    - Do **not** pre-plan documentation updates here; mapping realized changes back into Living Knowledge belongs to `/cs-merge`.
 
 ### Step 4: Exit Gate & Handoff
@@ -108,7 +110,7 @@ Upon confirmation, update the Change file status to `ready-to-build` (and update
 
 ## Change File Structure Owned by Spec (Section 3)
 
-Write and maintain Section 3 inside the **same** `<changes-dir>/<change-id>.md` file (preserving Section 4 `Reflection & Merge Handoff` if re-entering an existing Change):
+Write and maintain Section 3 inside the **same** `<changes-dir>/<change-id>.md` file (preserving Section 4 `Reflection & Merge Handoff` if re-entering an existing Change; for upgraded multi-slice topics, follow [`references/multi-slice.md`](references/multi-slice.md)):
 
 ```markdown
 ## 3. Product Design & Behavior Spec
@@ -130,12 +132,12 @@ Write and maintain Section 3 inside the **same** `<changes-dir>/<change-id>.md` 
 ### Solution Coverage
 | Proposal ID | Summary | Disposition | Rationale / Mapped Behavior |
 | :--- | :--- | :--- | :--- |
-| `PS-1` | <Original proposal> | `Fulfilled as proposed` / `Met via alternative` / `Adjusted or dropped` / `Unresolved` | <Why and where it is addressed> |
+| `PS-1` | <Original proposal> | `Fulfilled as proposed` / `Met via alternative` / `Adjusted or dropped` / `Deferred (Slice N / DT-*)` / `Unresolved` | <Why and where it is addressed> |
 
 ### Product Decisions
 - **Decision**: <Choice made> — *Alternatives considered*: <...> — *Rationale*: <...>
 - **Open Question** *(if any)*: <Unresolved choice and how to validate it or what deferral the user agreed to>
 
 ### Out of Scope
-- <Explicitly refused feature, edge case, or legacy behavior>
+- <Explicitly refused feature, edge case, legacy behavior, or later-slice capability>
 ```

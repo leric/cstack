@@ -43,7 +43,7 @@ Keep the report concise. Use `—` where a field does not apply. Perform **zero 
 
 ## Section 4 Handoff Preview (Ephemeral Clues for `/cs-merge`)
 
-- **Target Change file**: `<changes-dir>/<change-id>.md` *(or `Fast Path — create compact Change file` / `None — zero-overhead Fast Path`)*
+- **Target Change file**: `<changes-dir>/<change-id>.md` *(or `<changes-dir>/<topic-id>/<NN>-<slice-id>.md` / `Fast Path — create compact Change file` / `None — zero-overhead Fast Path`)*
 - **4.2 Touched Knowledge Slice**:
   - *Read & Used*:
   - *Contradicted / Stale*:

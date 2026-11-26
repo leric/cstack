@@ -71,10 +71,10 @@ Or copy `skills/` (and optionally `agents/` and `rules/`) directly into your age
 | Skill | When to Invoke | What You Get |
 | :--- | :--- | :--- |
 | **`/cs-explore`** | Starting a fuzzy requirement, unfamiliar domain, legacy overhaul, or user-proposed solution | Code-grounded reconnaissance + dependency-ordered frontier grilling + concrete examples → Sections 1–2 of `.cstack/changes/<change-id>.md` (Problem, `PS-*` proposals, Domain Delta) |
-| **`/cs-spec`** | Ready to design how the product should work or look (or handling a small Brownfield feature directly) | Product model, role division, on-demand `interactive-ux` / `visual-design` specs, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Section 3 of the same Change file |
+| **`/cs-spec`** | Ready to design how the product should work or look (or handling a small Brownfield feature directly) | Product model, role division, on-demand `interactive-ux` / `visual-design` specs, `PS-*` Solution Coverage, and `Out of Scope` guardrails → Section 3 of the same Change file *(upgrades on demand to a multi-slice directory if too big for one build)* |
 | **`/cs-build`** | Ready to architect, implement & verify non-trivial code | Conversational Quick or Full CMP plan using on-demand domain cases (`clean-architecture`, `frontend-architecture`, or both with Cross-Boundary Seam) → pauses **only** on unresolved *What-level* gates, otherwise builds & verifies inside-out directly |
 | **`/cs-reflect`** | Immediately after finishing a non-trivial implementation (while the live trace is still in context) | CMP friction diagnosis (`Missing Path` / `Boundary Bypass` / `Unowned Capability`) + `[R-*]` Refactor Proposals (executed in-branch once you approve, or deferred) + human sync + Section 4 (`Reflection & Merge Handoff`) written to the Change file |
-| **`/cs-merge`** | When ready to merge / land the change (works statelessly even in a fresh session) | Diff-verified Touched-Slice Local GC (`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE` + confirm-first advisories) on Living Knowledge, explicit routing for any deferred refactors, and cleanup of the completed Change file |
+| **`/cs-merge`** | When ready to merge / land the change (works statelessly even in a fresh session) | Diff-verified Touched-Slice Local GC (`ADD` / `RESOLVE` / `COMPRESS` / `PRUNE` + confirm-first advisories) on Living Knowledge, explicit routing for any deferred refactors/topics, and cleanup of the completed Change artifact |
 
 ---
 
@@ -137,7 +137,10 @@ You do **not** have to run all five skills every time:
 .cstack/
 ├── index.md                    # Thin map to your Living Knowledge (any layout) + Active Changes
 ├── changes/
-│   └── <change-id>.md          # Single in-flight file (Explore + Spec + Reflection Handoff; deleted on /cs-merge)
+│   ├── <change-id>.md          # Default: single in-flight file (Explore + Spec + Reflection; deleted on /cs-merge)
+│   └── <topic-id>/             # Optional (upgraded on demand by /cs-spec for oversized solutions)
+│       ├── overview.md         #   Shared Sections 1–2, master PS-*/DT-* ledger & thin Slice Map
+│       └── 01-<slice-id>.md    #   Active just-in-time slice spec + Section 4 (deleted once merged)
 └── friction.log                # Optional side-band log (consumed by /cs-reflect, cleared on closeout)
 ```
 
@@ -151,4 +154,3 @@ Your existing `docs/`, `GLOSSARY.md`, `DESIGN.md`, backend/frontend `architectur
 - [Reflective Bootstrapping](https://www.airic.dev/research/reflective-bootstrapping/): How Agents Turn Practice into Institutional Knowledge — The theory behind `/cs-reflect` and human-AI knowledge synchronization
 - [`docs/prd.md`](docs/prd.md) — Full Product Requirements Document & methodology rationale
 - [`skills/`](skills/) — Canonical `SKILL.md` definitions (`cs-explore`, `cs-spec`, `cs-build`, `cs-reflect`, `cs-merge`)
-- [`agents/cstack-explorer.md`](agents/cstack-explorer.md) & [`rules/cstack-friction-tracker.md`](rules/cstack-friction-tracker.md) — Optional shared read-only explorer subagent and compaction-safe friction tracker

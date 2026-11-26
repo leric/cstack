@@ -25,7 +25,7 @@ The **live task context** is the primary observation surface. Searches, files op
 - **Report mode is the default (zero writes).** Inspect, diagnose, draft concrete `[R-*]` Refactor Proposals, preview Section 4 of the Change file, and pause at the Human Review Gate—do **not** edit code, Change files, Living Knowledge, or skills before approval.
 - **Refactor & Record mode requires explicit user authorization.** Once the user decides which `[R-*]` refactors to run now vs. defer and confirms the Section 4 clues:
   1. Execute the approved refactors (`how-level` local repairs and user-resolved `what-level` refactors), rerun proportionate verification, and mark completed items `fixed-in-branch` (or leave deferred ones `defer-to-followup` / `wont-fix`);
-  2. Write or update `## 4. Reflection & Merge Handoff` in `<changes-dir>/<change-id>.md` and set `Status: reflected` (in both the Change file and `.cstack/index.md`).
+  2. Write or update `## 4. Reflection & Merge Handoff` in the active Change file (`<changes-dir>/<change-id>.md` or multi-slice `<changes-dir>/<topic-id>/<NN>-<slice-id>.md`, leaving `overview.md` untouched during Reflect) and set `Status: reflected` (in both the Change file and `.cstack/index.md`).
 - Never introduce a new concept, owner, boundary, layer, or placement rule without explicit human authorization (**Stay Out of the Architect's Chair**), and **never** modify Living Knowledge files during `/cs-reflect`.
 
 ## Evidence Contract
@@ -43,7 +43,7 @@ Separate observed facts from inference. Wide search, many changed files, or pass
 
 1. **Observe the live route & trace coverage.**
    - Recall from current task context: natural entry point, Living Knowledge docs opened, signals followed, useful and misleading paths, corrections, boundary choices, placement decisions, and verification.
-   - Check `.cstack/friction.log` (if present) and any active `<changes-dir>/<change-id>.md` from `.cstack/index.md`. State material trace gaps explicitly.
+   - Check `.cstack/friction.log` (if present) and any active Change file from `.cstack/index.md` (`<changes-dir>/<change-id>.md`, or active slice `<changes-dir>/<topic-id>/<NN>-<slice-id>.md` plus its `Parent Overview` `overview.md`). State material trace gaps explicitly.
 2. **Identify the modification closure.**
    - List the artifacts that had to change or stay consistent together and the route a future modifier is expected to follow.
 3. **Diagnose CMP design friction & draft Refactor Proposals (`[R-*]`).**
@@ -57,7 +57,7 @@ Separate observed facts from inference. Wide search, many changed files, or pass
    - Do **not** waste effort choosing Living Knowledge target layouts—`/cs-merge` handles routing via `.cstack/index.md`. Instead, extract only the live-session clues that vanish once this chat closes:
      - **4.2 Touched Knowledge Slice**: Which Living Knowledge files/sections were actually `Read & Used`, `Contradicted / Stale`, or `Read & Unused (Zero-Utility)` during this task (noting why unused docs were loaded, e.g., coarse `index.md` routing vs. dead content).
      - **4.3 Trace Clues for `/cs-merge`**:
-       - *Spec Deviations & Hidden Why*: Intentional mid-coding adjustments to Sections 2–3 or non-obvious domain/runtime constraints behind the code (so `/cs-merge` neither merges superseded Spec claims nor misses hidden *Why*);
+       - *Spec Deviations & Hidden Why*: Intentional mid-coding adjustments to Sections 2–3 or non-obvious domain/runtime constraints behind the code (so `/cs-merge` neither merges superseded Spec claims nor misses hidden *Why*; for multi-slice topics, also note any practice discovery that revises a shared assumption in `overview.md` or impacts queued slices);
        - *Contradicted Claims*: Specific doc claims disproven in practice + code evidence;
        - *Code-Internalized Guardrails*: Specific prose warnings/rules now enforced by types, tests, or encapsulation (including refactors executed in Step 7);
        - *Exception Hotspots & Structural Routes*: Touched doc sections with 3+ scattered caveats needing compression, or durable new architectural boundaries/ports/owners established.
@@ -67,13 +67,13 @@ Separate observed facts from inference. Wide search, many changed files, or pass
      2. Which **Touched Knowledge Slice & Trace Clues** (`4.2` & `4.3`) to persist into Change File Section 4 for `/cs-merge`.
 7. **Execute Approved Refactors & Persist Section 4 (Authorized Only).**
    - Execute each refactor approved for immediate action, run owning-level tests and boundary/type checks (plus live browser verification if UI layout, styling, or runtime behavior changed), and update its disposition to `fixed-in-branch` (adding any prose rule newly internalized by the refactor to `4.3 Code-Internalized Guardrails`).
-   - Write `## 4. Reflection & Merge Handoff` into `<changes-dir>/<change-id>.md` and update `Status: reflected` in both the Change file and `.cstack/index.md`:
+   - Write `## 4. Reflection & Merge Handoff` into the active Change file (`<changes-dir>/<change-id>.md` or `<changes-dir>/<topic-id>/<NN>-<slice-id>.md`) and update `Status: reflected` in both the Change file and `.cstack/index.md`:
      - **Fast-Path Rule (no prior Change file)**: If the task started directly from `/cs-build` without a Change file, lazily create a compact `<changes-dir>/<change-id>.md` (header with `Status: reflected`, 2-line Context summary, and Section 4) and register it in `.cstack/index.md` **only** when `defer-to-followup` refactors or non-empty `4.2`/`4.3` clues remain for `/cs-merge`. If neither remains, keep **zero file overhead** and clear consumed entries in `.cstack/friction.log`.
    - **Strict Guardrail**: Do **not** edit any Living Knowledge file or delete the Change file; leave `.cstack/friction.log` cleanup to `/cs-merge` whenever a Change file remains active.
 
 ## Change File Structure Owned by Reflect (Section 4)
 
-Append or update Section 4 inside `<changes-dir>/<change-id>.md` (preserving Sections 1–3 when present):
+Append or update Section 4 inside the active Change file (`<changes-dir>/<change-id>.md` or `<changes-dir>/<topic-id>/<NN>-<slice-id>.md`, preserving Sections 1–3 when present):
 
 ```markdown
 ## 4. Reflection & Merge Handoff

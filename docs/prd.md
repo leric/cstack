@@ -161,7 +161,7 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 
 #### 核心能力
 
-- **EXP-01 Problem Discovery：** 识别用户面临的问题、目标、利益相关者、现有解决方式和约束。
+- **EXP-01 Problem Discovery：** 识别用户面临的问题、目标、利益相关者、现有解决方式和约束（若输入横跨多个松耦合问题域，可引导聚焦单一子域，将剩余子问题暂存为 `DT-*` 供收口后开启新探索；一次 Explore 仍只维护一个 Change 文件）。
 - **EXP-02 Domain Knowledge Discovery：** 发现领域中的核心概念、关系、业务规则、事件、状态和工作方式；与领域专家或可信材料确认重要的领域事实。
 - **EXP-03 Proposed Solution Capture：** 完整记录客户提出的解决方案（编号记录 `PS-*`），包括功能要求、工作流程和操作方式；理解方案背后的业务动机，不默认它必须原样实现，也不居高临下地否定。
 - **EXP-04 Knowledge Gap Detection & Frontier Grilling：** 优先通过已有知识库和代码库自行解决事实问题；将未决的领域缺口、术语冲突和隐藏假设组织成决策树，按前沿（Frontier）分轮追问，每题附带推荐答案与依据。
@@ -190,9 +190,9 @@ Agent 应尽可能自行完成信息搜索、分析、归纳、一致性核验�
 - **SPEC-01 Product Model Design：** 根据产品目标选择和组织领域概念，构建产品自身的概念模型；允许引入并不存在于原有业务中的产品抽象。
 - **SPEC-02 Responsibility & Workflow Design：** 设计软件、用户、Agent 和其他参与者之间的职责与协作方式，定义目标工作流程、交互行为、决策点和权限约束。
 - **SPEC-03 Behavior, UX & Visual Specification + Out of Scope：** 明确外部可观测功能行为、业务规则、状态转换、异常情况与验收条件；针对前端界面提供两个正交的按需加载场景——**`interactive-ux`（好不好用）** 在所有界面功能中审视空间连续性、乐观反馈/撤销体验、渐进式披露、全状态矩阵与跨端接口诉求，**`visual-design`（好不好看）** 仅在 0→1 新产品、视觉改版或品牌展示页中加载以按产品属性校准审美调性与信息密度、锁定四大视觉支柱并建立反样式 Slop 护栏（成熟存量项目日常迭代默认不加载，直接继承 `DESIGN.md` / Token）；同时明确列出 **Out of Scope（显式拒绝清单）**，防止范围膨胀。
-- **SPEC-04 Solution Coverage：** 逐条对照 Explore 阶段记录的客户原案（`PS-*`），明确每一项的处理方式（原样满足 / 替代方案达成动机 / 协商调整或取消 / 尚未解决），绝不静默丢弃重要诉求。
+- **SPEC-04 Solution Coverage：** 逐条对照 Explore 阶段记录的客户原案（`PS-*`），明确每一项的处理方式（原样满足 / 替代方案达成动机 / 协商调整或取消 / 明确归入后续切片或 `DT-*` / 尚未解决），绝不静默丢弃重要诉求。
 - **SPEC-05 Product Decisions, HTML Wireframes & Style Tiles：** 对候选方案进行分析和比较；当文字难以表达布局、交互或视觉调性时，用单个可直接打开的临时 HTML 辅助拍板（视觉定调时采用原生 CSS 变量 + 真实业务数据的 Style Tile，杜绝 Bootstrap 模板污染审美；存量交互流采用贴合既有组件语汇的轻量草图），确认后将行为、视觉支柱及理由写回 Change Spec。
-- **SPEC-06 Brownfield Fast-Path：** 对于小规模增量变更，允许直接从 `/cs-spec` 进入并内联完成轻量知识缺口检查；仅当发现深层领域冲突时建议切回 `/cs-explore`。
+- **SPEC-06 Brownfield Fast-Path：** 对于小规模增量变更，允许直接从 `/cs-spec` 进入并内联完成轻量知识缺口检查；仅当发现深层领域冲突时建议切回 `/cs-explore`。（若设计方案时发现改动超出单次 `/cs-build` 的合理规模，可按需升级为多切片目录 `<topic-id>/` 并按切片即时展开 Spec，详见 6.1。）
 
 #### 输出知识（写入当前 Change 文件 Section 3）
 
@@ -270,25 +270,27 @@ Reflect 面向的是**分支内的代码结构健康与执行期认知同步**�
   - **`COMPRESS`（收敛与下沉）：** 当触碰章节积累了 3 条以上零散特例或补丁式说明时，重写为紧凑的当前态规则/表格，并提示可下沉为静态检查或测试的条目。
   - **`PRUNE`（验证后剪枝）：** 对经最终代码核实属于**失效（obsolete）**、**矛盾淘汰（contradicted）**或**已被代码/类型/测试内化（internalized）**的旧提示与过时段落，直接提议删除。
   - **`REMIND`（提醒确认）：** 对其他观察信号（如 `4.2 Read & Unused` 中未证实失效、仅因 `index.md` 路由粒度过粗而被连带读取的有效文档），不自动归入删除，而是先作为提醒展示选项（保持不动 / 收紧 `index.md` 路由指针 / 删改），**仅在用户明确确认后才执行修改**。
-- **MRG-03 Deferred Refactor Routing：** 扫描 Section `4.1` 中仍处于 `pending` 或 `defer-to-followup` 的重构项，在清理 Change 文件前强制确认去向（新建独立重构 Change 文件、记入 Architecture Map 的 `Known Boundary Debts` / `Open Ownership Questions`、转外部 Issue 或显式关闭为 `wont-fix`），确保架构债绝不静默丢失。
-- **MRG-04 Clean Lifecycle Closeout：** 执行获批的 Living Knowledge 与 `.cstack/index.md` 更新（移除已完成 Change），**默认删除 `<changes-dir>/<change-id>.md`**（依托 Git 历史留存审计轨迹，彻底消除历史 Change 堆积带来的 `rg` 搜索污染），并清空已消费的 `.cstack/friction.log` 记录。
+- **MRG-03 Deferred Item Routing：** 扫描 Section `4.1` 中未闭环的延后重构项（`[R-*]`），以及（在单文件或最终切片收口时）由 Explore 暂存的跨问题子域（`[DT-*]`），在清理 Change 产物前强制确认去向（新建后续 Change stub、记入 Architecture Map、转外部 Issue 或显式关闭），确保架构债与暂存问题绝不静默丢失。
+- **MRG-04 Clean Lifecycle Closeout：** 执行获批的 Living Knowledge 与 `.cstack/index.md` 更新，默认删除已完成的 `<changes-dir>/<change-id>.md`（多切片主题合入中间切片时更新 `overview.md` 并仅删除当前切片文件，最终切片合入后删除整个 `<topic-id>/` 目录），依托 Git 历史留痕，并清空已消费的 `.cstack/friction.log` 记录。
 
 ---
 
 ## 6. Knowledge & Artifact Management
 
-### 6.1 极简契约：总体 Index + 单文件在途 Change + 其余结构不限
+### 6.1 极简契约：总体 Index + 单文件在途 Change（大方案按需升级）+ 其余结构不限
 
 cstack 不强行规定用户代码库的文档目录体系，仅约定两个极简锚点（强默认 + 可覆写）：
 
 1. **总体 `index` 文件（默认 `.cstack/index.md`）：** 作为整个知识库的 **Context Routing Index**，仅描述：
    - **Living Knowledge 地图：** 现有领域知识、产品行为、架构索引分别位于仓库何处（用户完全自由组织，如 `docs/`、`GLOSSARY.md`、代码注释、ADR 等）。
    - **Changes 目录位置：** 默认 `.cstack/changes/`。
-   - **Active Changes 列表：** 当前在途的 Change 文件及其状态（`exploring` | `speccing` | `ready-to-build` | `reflected`；经 `/cs-merge` 收口后从活跃列表移除）。
-2. **单文件在途 Change（`<changes-dir>/<change-id>.md`）：** 一次变更从探索到合入前的全部增量契约集中在**单个 Markdown 文件**的 4 个章节中：
-   - `1. Problem & Proposed Solutions` & `2. Domain Delta`（`/cs-explore`）
-   - `3. Product Design & Behavior Spec`（`/cs-spec`）
-   - `4. Reflection & Merge Handoff`（`/cs-reflect`：含 `4.1 Design Friction & Refactor Proposals`、`4.2 Touched Knowledge Slice`、`4.3 Trace Clues for /cs-merge`）
+   - **Active Changes 列表：** 当前在途的 Change 文件及其状态（`exploring` | `speccing` | `ready-to-build` | `reflected`；经 `/cs-merge` 收口后从活跃列表移除）。当大方案升级为多切片目录时，采用缩进层级登记父目录 `changes/<topic-id>/` 与其下活跃切片，确保切片衔接空档期父主题依然可见。
+2. **在途 Change 契约（默认单文件，大方案按需升级）：**
+   - **默认单文件（`<changes-dir>/<change-id>.md`）：** 常规变更从探索到合入前的全部增量契约集中在**单个 Markdown 文件**的 4 个章节中：
+     - `1. Problem & Proposed Solutions`（含可选 `DT-*` 暂存子问题）& `2. Domain Delta`（`/cs-explore`）
+     - `3. Product Design & Behavior Spec`（`/cs-spec`）
+     - `4. Reflection & Merge Handoff`（`/cs-reflect`：含 `4.1 Design Friction & Refactor Proposals`、`4.2 Touched Knowledge Slice`、`4.3 Trace Clues for /cs-merge`）
+   - **多切片主题目录（按需升级 `<changes-dir>/<topic-id>/`）：** 仅当 `/cs-spec` 发现单次交付过大时按需升级，由 `overview.md`（共享 Sections 1–2、完整 `PS-*` 总账、`DT-*` 与薄 `Slice Map`）和按需实例化的当前切片 `<NN>-<slice-id>.md`（Sections 3–4）组成。
 
 ### 6.2 两种生命周期
 
@@ -308,7 +310,7 @@ cstack 不强行规定用户代码库的文档目录体系，仅约定两个极�
 | 知识 | 主要权威表达 |
 |---|---|
 | 知识库路由与在途变更索引 | `index` (`.cstack/index.md`) |
-| 一次在途变更的探索、规格与反思交接契约 | Single-File Change (`changes/<change-id>.md`, Sections 1–4) |
+| 一次在途变更的探索、规格与反思交接契约 | Single-File Change (`changes/<change-id>.md`, Sections 1–4) 或按需升级的多切片目录 (`changes/<topic-id>/overview.md` + `<NN>-<slice-id>.md`) |
 | 领域事实和概念（当前态） | Living Domain Knowledge（结构不限，在 `index` 登记） |
 | 当前产品行为（当前态） | Living Behavior Knowledge（结构不限，在 `index` 登记） |
 | 实现责任、类型、不变量与防呆约束 | Code / Types / Tests / Semantic Comments |
